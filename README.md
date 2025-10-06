@@ -1,6 +1,6 @@
 # Yezz.me
 
-A modern, interactive portfolio website built with Next.js, Three.js, React, and ShadCN UI. Features dynamic content management through YAML and MDX files.
+A modern, interactive portfolio website built with Next.js, Frame Motion, and ShadCN UI. Features dynamic content management through YAML and MDX files.
 
 ## Features
 
@@ -156,7 +156,6 @@ MIT License - feel free to use this template for your own portfolio!
 If you have questions or need help customizing the portfolio:
 
 - Create an issue on GitHub
-- Check the documentation
 - Review the example content files
 
 ---
