@@ -217,18 +217,6 @@ export async function mdxToHtml(mdxContent: string): Promise<string> {
     },
   );
 
-  // Process URLs to make them clickable (but not inside code blocks)
-  htmlContent = htmlContent.replace(
-    /(?<!<code[^>]*>)(?<!<pre[^>]*>)(https?:\/\/[^\s<>"{}|\\^`[\]]+)(?![^<]*<\/code>)(?![^<]*<\/pre>)/g,
-    '<a href="$1" target="_blank" rel="noopener noreferrer" class="blog-link">$1</a>',
-  );
-
-  // Process GitHub URLs specifically
-  htmlContent = htmlContent.replace(
-    /(?<!<code[^>]*>)(?<!<pre[^>]*>)(https?:\/\/github\.com\/[^\s<>"{}|\\^`[\]]+)(?![^<]*<\/code>)(?![^<]*<\/pre>)/g,
-    '<a href="$1" target="_blank" rel="noopener noreferrer" class="blog-link github-link">$1</a>',
-  );
-
   // Process code blocks with syntax highlighting using Prism.js
   htmlContent = htmlContent.replace(
     /<pre><code class="language-(\w+)">([\s\S]*?)<\/code><\/pre>/g,

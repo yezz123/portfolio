@@ -1,4 +1,4 @@
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
@@ -65,9 +65,11 @@ export async function GET(request: NextRequest) {
                 marginRight: "20px",
               }}
             >
-              <Image
-                src={`${new URL(request.url).origin}/icon.svg`}
+              <img
+                src={`${new URL(request.url).origin}/icons/wave.png`}
                 alt="Logo"
+                width={40}
+                height={40}
                 style={{
                   width: "40px",
                   height: "40px",
