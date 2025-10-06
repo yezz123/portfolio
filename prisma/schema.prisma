@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and preferences
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// Blog posts model
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String   // MDX content
+  published   Boolean  @default(false)
+  featured    Boolean  @default(false)
+  readingTime Int      @default(5)
+  tags        String[]
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  likes    BlogLike[]
+  dislikes BlogDislike[]
+
+  @@map("blog_posts")
+}
+
+// Blog likes - no user restrictions
+model BlogLike {
+  id        String   @id @default(cuid())
+  blogId    String
+  createdAt DateTime @default(now())
+
+  blog BlogPost @relation(fields: [blogId], references: [id], onDelete: Cascade)
+
+  @@map("blog_likes")
+}
+
+// Blog dislikes - no user restrictions
+model BlogDislike {
+  id        String   @id @default(cuid())
+  blogId    String
+  createdAt DateTime @default(now())
+
+  blog BlogPost @relation(fields: [blogId], references: [id], onDelete: Cascade)
+
+  @@map("blog_dislikes")
+}
+
+
+// Talks model
+model Talk {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  venue       String
+  date        DateTime
+  slidesUrl   String?
+  videoUrl    String?
+  imageUrl    String?
+  tags        String[]
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("talks")
+}
+
+// Projects model
+model Project {
+  id           String   @id @default(cuid())
+  name         String
+  description  String
+  url          String?
+  githubUrl    String?
+  imageUrl     String?
+  technologies String[]
+  featured     Boolean  @default(false)
+  pinned       Boolean  @default(false)
+  stars        Int      @default(0)
+  forks        Int      @default(0)
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+
+  @@map("projects")
+}
+
+// Work experience model
+model WorkExperience {
+  id           String   @id @default(cuid())
+  company      String
+  position     String
+  startDate    DateTime
+  endDate      DateTime?
+  description  String
+  technologies String[]
+  logoUrl      String?
+  current      Boolean  @default(false)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("work_experience")
+}
+
+// Uses items model
+model UsesItem {
+  id          String @id @default(cuid())
+  category    String // 'desk', 'home', 'tools'
+  name        String
+  description String
+  url         String?
+  icon        String?
+  order       Int    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("uses_items")
+}
+
+// Site configuration model
+model SiteConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("site_config")
+}
+
+// GitHub stats cache
+model GitHubStats {
+  id             String   @id @default(cuid())
+  username       String   @unique
+  totalRepos     Int      @default(0)
+  totalStars     Int      @default(0)
+  totalForks     Int      @default(0)
+  commitActivity Json     // Store as JSON
+  languages      Json     // Store as JSON
+  lastUpdated    DateTime @default(now())
+
+  @@map("github_stats")
+}
