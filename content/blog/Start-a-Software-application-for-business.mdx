@@ -1,0 +1,227 @@
+---
+title: 'Start a Software application for Business'
+date: '2020-12-21'
+tags: ['Business', 'Python', 'Django', 'Deploy']
+featured: false
+excerpt: 'Software application for businesses Application software focused on businesses is implementations IT departments use to enhance business productivity, searching for superior performance and devoted to create value and therefore competitive advantage.'
+image: '/images/blog/09/02.gif'
+---
+
+![business](/images/blog/09/01.gif)
+
+---
+
+# Introduction
+
+Software application for businesses Application software focused on businesses is implementations IT departments use to enhance business productivity, searching for superior performance and devoted to create value and therefore competitive advantage.
+
+It started with Management Information Systems and extended into enterprise resource planning systems. Then customer relationship management was added to the solution and finally the whole package moved into the cloud business management space.
+
+Although there is an actual correlation between IT efforts and the organizations' performance, two elements are key to add value to the sum; these are the implementation's effectiveness and the proper tools selections and adaptation process.
+
+And Now we create an repositories about management tool and control accounts, invoices, partners, projects, and server.
+
+## Business : Project for management
+
+There are tools related to each organization's department which can be classified for each aspect of management.
+
+For example:
+
+- planning tools, process tools, records tools, employee related tools, decision making tools, control tools, etc.
+
+A classification by function would consider these general aspects:
+
+`Tools used for data input and validation in any department.`
+
+`Tools used for controlling and improving business processes.`
+
+`Tools used for data consolidation and decision making.`
+
+Nowadays, management tools have evolve dramatically in last decade thanks to fast technology advances, so fast that it is difficult to select the best business tools for any situation in any company. This is caused by a never ending fight for lower costs and increase sales, the willing for understanding the customers' needs and the fight for delivering the products that meets their need in the way they require.
+
+Under this scenario managers should take a strategic attitude to business management tools instead of going for latest tool. Usually managers rely on the tools without any adaptation which leads to an unstable situation. Business management tools should be selected carefully, and then adapted to the organization needs and not the other way around.
+
+- To do all this implementation and work we need a Project to Start.
+- That why i create [My Business](https://github.com/GDGSNF/My-Business) A business Management Tool Created with Django and Python.
+- Let's start to use it and work on it to start a Software application for Business ❤
+
+<h3>Installation</h3>
+
+Make sure `Python >= 3.6` and `pip` are installed before proceeding with the installation instructions.
+
+_Note: If you are following these instructions when deploying My Buisness, it is **highly** recommended that you clone the repository in `/srv`._
+
+1. Clone this repository.
+
+2. Create a virtual environment using `$ python3 -m venv venv`.
+
+3. Activate the virtual environment using `$ source venv/bin/activate`.
+
+4. Install the external `pdftk` dependency using `$ sudo apt install pdftk` for Debian based distributions.
+
+   _Note: You may face issues installing `pdftk` on Ubuntu 18.04. Visit [this](https://askubuntu.com/questions/1028522/how-can-i-install-pdftk-in-ubuntu-18-04-and-later) link for further instructions._
+
+5. Install the `Python` dependencies using `$ pip install -r requirements.txt`.
+
+   _Note: You can safely ignore any errors about `bdist_wheel`._
+
+6. Create `config.ini` by making of copy of `config.ini.defaults` using `$ cp config.ini.defaults config.ini`.
+
+7. Edit `config.ini` with your preferred text editor and make changes to the configuration (if necessary).
+
+   _Note:My Buisness is using a SQLite3 database while `DEBUG=True`. You don't need to specify a database user or password._
+
+8. Apply the migrations using `$ python manage.py migrate`.
+
+9. Create a superuser account using `$ python manage.py createsuperuser`.
+
+10. Enable the `Cron Jobs` using `$ python manage.py crontab add`. (You need to be logged in as the user that's running the server).
+
+You should now have a development version of the My Buisness`accessible at`localhost:8000`or`127.0.0.1:8000`.
+
+<h3>Development</h3>
+
+_Always activate the virtual environment before performing operations._
+
+- Run the server using `$ python manage.py runserver`.
+
+- Stop the server by pressing `Ctrl-C`.
+
+_If you want My Buisness to send emails to the console while developing, edit `my-buisness/common/settings.py` and replace the value of `EMAIL_BACKED` with `'django.core.mail.backends.console.EmailBackend'`. Don't forget to undo this before committing!_
+
+<h3>Deployment</h3>
+
+_Follow the installation instructions before continuing. If you are running the Django server, press Control-C to close it._
+
+_Make sure you have `root` privileges._
+
+<h3>Django configuration</h3>
+
+1. Collect the static files (by default in `/var/www/my-buisness/static/`) using `$ python manage.py collectstatic`.
+
+2. Generate a `SECRET_KEY` using `$ python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'`.
+
+3. Copy the returned key to your clipboard because we will need it soon.
+
+4. Edit `config.ini` with your preferred text editor and replace the current `SECRET_KEY` with the one you generated earlier (it's in your clipboard, right!?).
+
+<h3>Firewall configuration</h3>
+
+**If you have a firewall set up (recommended), make sure to open ports 80 and 443.**
+
+- If you have `UFW` set up:
+
+  - Run `$ ufw allow http`.
+  - Run `$ ufw allow https`.
+
+- If don't have `UFW` and have only `iptables` set up:
+  - Open `/etc/sysconfig/iptables` for editing using your preferred text editor.
+  - Add the following lines to the file if they do not already exist, then save and exit:
+
+```
+-A INPUT -m state --state NEW -p tcp --dport 80 -j ACCEPT
+-A INPUT -m state --state NEW -p tcp --dport 443 -j ACCEPT
+```
+
+<h3>Installing additional dependencies</h3>
+
+- Install Gunicorn using `$ pip install gunicorn`.
+- Install Nginx using `$ apt install nginx`.
+- Install Certbot using `$ apt install python3-certbot-nginx`.
+
+_Note: Make sure to edit the file and directory paths accordingly in the instructions below._
+
+<h3>Setting up the Gunicorn service</h3>
+
+- Edit `/etc/systemd/system/gunicorn_bt.socket` using your preferred text editor and add the following to the file:
+
+```
+[Unit]
+Description=gunicorn bt socket
+
+[Socket]
+ListenStream=/run/gunicorn_bt.sock
+
+[Install]
+WantedBy=sockets.target
+```
+
+- Edit `/etc/systemd/system/gunicorn_bt.service` using your preferred text editor and add the following to the file:
+
+```
+[Unit]
+Description=gunicorn bt daemon
+Requires=gunicorn_bt.socket
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/srv/my-buisness
+ExecStart=/srv/business-tracer/venv/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn_bt.sock \
+          common.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+
+- Start the Gunicorn socket using `$ systemctl start gunicorn_bt.socket`.
+- Enable the Gunicorn socket (to run at startup) using `$ systemctl enable gunicorn_bt.socket`.
+
+<h3>Setting up Nginx</h3>
+
+- Remove the `default` configuration from `sites-enabled` using `$ rm /etc/nginx/sites-enabled/default`.
+- Edit `/etc/nginx/sites-available/blog` using your preferred text editor and add the following to the file:
+
+\*Note: Make sure to replace `YOUR_FULLY_QUALIFIED_DOMAIN_NAME` with your [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name).
+
+```
+server {
+    listen 80;
+    server_name YOUR_FULLY_QUALIFIED_DOMAIN_NAME;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        root /var/www/my-buisness;
+    }
+
+    location /media/ {
+        root /var/www/my-buisness;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn_bt.sock;
+    }
+}
+```
+
+- Enable the Nginx config using `$ ln -s /etc/nginx/sites-available/my-buisness /etc/nginx/sites-enabled/my-buisness`.
+- Restart Nginx using `$ systemctl restart nginx`.
+
+<h3>Setting up the HTTPS certificate</h3>
+
+\*Note: Make sure to replace `YOUR_FULLY_QUALIFIED_DOMAIN_NAME` with your [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name).
+
+- Create an HTTPS certificate with Certbot using `$ certbot --nginx -d YOUR_FULLY_QUALIFIED_DOMAIN_NAME`.
+- Follow the script instructions.
+- You should choose option 2 (Redirect) when the script asks if you want users to be redirected to the `HTTPS` version of the website if they try accessing the `HTTP` version.
+
+Good job! You should now have a running instance of My Buisness.
+
+---
+
+## References
+
+- https://github.com/GDGSNF/My-Business
+- https://quintagroup.com/cms/python/tree.io
+- https://pbpython.com/
+- https://www.linode.com/
+- https://www.djangoproject.com/
+- http://gunicorn.org/
+- https://www.nginx.com/
+- https://certbot.eff.org/

@@ -1,0 +1,43 @@
+---
+title: 'How to Discover Device Manufacturer Based on MAC Address?'
+date: '2021-02-13'
+tags: ['Hacking', 'Security', 'guide']
+featured: false
+excerpt: 'Need some little help with figuring which of the computers on the network is the apple device just using a MAC address?'
+image: '/images/blog/03/01.jpg'
+---
+
+Need some little help with figuring which of the computers on the network is the apple device just using a MAC address? Have a look at this post as it might have a little tip for you.
+
+There are some great tools out there such as Nmap that would give us the connected clients on the same network along with their MAC address and the device vendor, the only issue with this is that Nmap only works after connecting to the target network.
+
+But we know there are a number of attacks that can be launched before connecting to a network, and we also know that we can see all connected clients to a network using airodump-ng before connecting to the network, even if we don't know the network key, the only problem is airodump-ng does not give us any info other than the MAC address of the connected clients, but what if we can identify the device vendor based on the MAC address?
+
+![02](/images/blog/03/02.png)
+
+Lets start with shortly explaining what MAC address is.
+
+Media Access Control is also known as a MAC address and is a physical address that actually belongs to the device itself and was assigned by its vendor. This address is made out of 48 bits which are represented using 6 octets (8 bits/ 1 byte) separated by double colons and shown as hexadecimal values instead of their binary/decimal representation. This address is used along with the IP (Internet Protocol) to determine the destination and source addresses for travelling packets in the networks (including internet )
+An example of a MAC address is:
+
+```
+00:11:22:33:44:55
+```
+
+MAC address itself is actually made out of two parts:
+
+- 1. First three octets are known as OUI or Organizationally Unique Identifier and are telling us who the vendor of this device actually is.
+
+- 2. Last three octets however are commonly known as a Vendor Assigned ID which would allow the vendor to identify this specific piece of equipment.
+
+The MAC address is finally a main ingredient of a Data-Link layers Ethernet Protocol which would be the top layer of most of packets transmitted in the networks and can be seen nicely while inspecting packets using Wireshark and other monitoring software out there.
+
+Now lets get to the point :
+
+So you have used airodump-ng and got your own BSSID and would like to use aireplay-ng to deauthenticate one or more of the devices shown in the 2nd part of airodump-ng as shown above, the problem is you are still unsure how to go about identifying your apple (target) device.
+
+Well there is a solution for you, now you could copy the OUI parts of the MACs addresses you have found and check this OUIs on this website (one of many options out there) and it will gift you with their Vendor names. Now if those devices were labeled as an Apple Inc. than you were able to isolate a problem a bit which was the whole point and now it shall be much easier for you to find out whether this is the device you were looking for.
+
+![03](/images/blog/03/03.png)
+
+If this does not give you the answer you wanted, you can also look this vendor up on google and try to figure out whether it might be a telephone device (if you are looking for android smartphones) or any other computer to figure whether it might have some other OS installed on it and then based on this perform your next steps.

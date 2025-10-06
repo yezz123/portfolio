@@ -1,0 +1,196 @@
+---
+title: 'Decorator & API Design Patterns'
+date: '2022-12-29'
+tags: ['API', 'Python', 'Decorator', 'Design Patterns']
+featured: true
+excerpt: 'A decorator is a design pattern in Python that allows a user to add new functionality to an existing object without modifying its structure.'
+image: '/images/blog/14/01.png'
+---
+
+- [What is a Decorator?](#what-is-a-decorator)
+- [Decorated function with arguments](#decorated-function-with-arguments)
+- [Decorator function has an argument](#decorator-function-has-an-argument)
+- [Use `@wraps`](#use-wraps)
+- [Use in API design](#use-in-api-design)
+
+## **What is a Decorator?**
+
+In Python, a decorator is a design pattern that allows you to modify the functionality of a function by wrapping it in another function.
+
+The outer function is called the decorator, which takes the original function as an argument and returns a modified version of it.
+
+**Decorator is a kind of Semantic Sugar used in Python.**
+
+- **adding functionality to a function without modifying the function**
+
+can be said Let's go right through the code.
+
+```py
+def decorator(function) :
+     # receives the function to be Decorated as a parameter
+	def wrapper() :
+          # calls the function received as a parameter inside the Decoration function
+		print("start")
+          function()
+		print("end")
+	return wrapper
+
+@decorator
+def function() :
+     # Decorated function
+	print( "Hello World")
+```
+
+The output result is as follows.
+
+```shell
+$ start Hello World end
+```
+
+## **Decorated function with arguments**
+
+```py
+def decorator(function) :
+     # receives the function to be Decorated as a parameter
+	def wrapper(name) :
+          # calls the function received as a parameter inside the Decoration function
+		print("start")
+		function(name)
+		print("end")
+	return wrapper
+
+@decorator
+def function(name) :
+     # Decorated function
+	print( "Hello World"  + name )
+```
+
+Just write the same argument to the function you decorate. **What if there are multiple arguments?**
+
+```py
+def decorator(function) :
+     # receives the function to be Decorated as a parameter
+	def wrapper(*args, **kwargs) :
+          # calls the function received as a parameter inside the Decoration function
+		print("start")
+		function(name)
+		print("end")
+	return wrapper
+
+@decorator
+def function(name) :
+     # Decorated function
+	print( "Hello World"  + name )
+```
+
+Variable arguments and variable keyword arguments can be received through `*args` and `**kwargs`.
+
+## **Decorator function has an argument**
+
+Different from above!! If you want to pass an argument to the Decorator **(decorated)** function rather than Decorated **(to be decorated)**, you can do it as follows.
+
+```py
+def parameter(parameter) :
+     # receives the argument to be passed to the Decorator function as a parameter
+	def decorator(function) :
+          # receives the function to be Decorated as a parameter
+		def wrapper(*args, **kwargs) :
+               # calls the function received as a parameter inside the Decoration function
+			print ("start" + parameter);
+			function (name)
+			print ("end" + parameter);
+		return wrapper
+	return decorator
+
+@parameter(parameter)
+def function(name) :
+     # Decorated function
+	print( "Hello World"  + name)
+```
+
+Since the Decorator function generally receives the Decorated function as a parameter, other parameters cannot be entered.
+
+So, you can define a function that creates a function and make it return a function.
+
+## **Use `@wraps`**
+
+There are several problems with using Decorator as above. As Decorator overwrites the function:
+
+```py
+print(function.__name__)
+```
+
+You cannot use the same syntax. `(The decorator is output.)`
+
+What's wrong with this? You may think that, but if you create an API Sheet using Swagger, etc., now a funny situation occurs.
+
+Anyway, there are various problems, so I just do it like below unconditionally .
+
+```py
+from functools import wraps
+
+def decorator(function) :
+     # receives the function to be Decorated as a parameter
+     @wraps(function)
+     def wrapper(*args, **kwargs) :
+          # calls the function received as a parameter inside the Decoration function
+          print("start")
+          function(name)
+          print("end")
+     return wrapper
+
+@decorator
+def function(name) :
+     # Decorated function
+     print( "Hello World"  + name)
+```
+
+Just import the wraps module from functools and call wraps on top of the wrapper.
+
+## Use in API design
+
+FastAPI is a modern, fast, web framework for building APIs with Python 3.7+ based on standard Python type hints. One way to use decorators in FastAPI is to define request validators, which allow you to specify rules for validating requests made to your API.
+
+For example, suppose you want to define an API endpoint for creating a new user.
+
+You might want to ensure that the request includes all required fields, such as a name and email address.
+
+You can use a decorator to validate the request body and return an error if any required fields are missing.
+
+Here's an example of how you might define a request validator using a decorator in FastAPI:
+
+```py
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class User(BaseModel):
+    name: str
+    email: str
+
+def validate_request(request_model):
+    def decorator(func):
+        async def wrapper(*args, **kwargs):
+            request_data = kwargs['request_data']
+            if not request_data.name:
+                raise HTTPException(status_code=400, detail="Name is required")
+            if not request_data.email:
+                raise HTTPException(status_code=400, detail="Email is required")
+            return await func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+@app.post("/users/")
+@validate_request(User)
+async def create_user(request_data: User):
+    return {"name": request_data.name, "email": request_data.email}
+```
+
+In this example, the `validate_request` decorator checks the request body for the required name and email fields.
+
+If either field is missing, it raises an HTTP exception with a status code of `400` (Bad Request).
+
+If the request is valid, the decorated function `(create_user)` is called and the request data is passed as an argument.
+
+You can use decorators like this to add validation, authentication, or other functionality to your API endpoints in FastAPI.

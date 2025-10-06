@@ -1,0 +1,138 @@
+# Personal Information
+personal:
+  name: "Yasser Tahiri"
+  title: "Senior Software Engineer"
+  bio: "Software Engineer with a relentless pursuit of knowledge and a genuine passion for emerging technologies, particularly in the realms of Backend and DevOps."
+  bioLong: |
+    As a Software Engineer, my journey has been marked by a relentless pursuit of knowledge, largely self-driven and fueled by a genuine passion for emerging technologies, particularly in the realms of Backend and DevOps.
+
+    Beyond my technical expertise, I am deeply enthusiastic about groundbreaking concepts and thrive on unconventional modes of thinking, a fervor that often surpasses my dedication to technology. My commitment to staying on the cutting edge of the industry is not merely a professional obligation but a personal drive that fuels my continuous exploration of innovative ideas and solutions.
+  avatar: "/images/avatar.jpeg"
+  location: "Morocco"
+  email: "hello@yezz.me"
+  github: "yezz123"
+  twitter: "THyasser1"
+  linkedin: "yezz123"
+  steam: "yezz123"
+  website: "https://yezz.me"
+
+# Contact & Booking Configuration
+contact:
+  email: "hello@yezz.me"
+  calUsername: "yezz123"
+  responseTime: "48 hours"
+  availableForWork: false
+
+# Site Configuration
+site:
+  title: "Yasser Tahiri"
+  description: "Passionate Software Engineer with a relentless pursuit of knowledge and a genuine passion for emerging technologies, particularly in the realms of Backend and DevOps."
+  url: "https://yezz.me"
+  author: "Yasser Tahiri"
+  keywords:
+    - "Software Engineer"
+    - "Backend"
+    - "Python"
+    - "FastAPI"
+    - "DevOps"
+
+# Social Links
+social:
+  github:
+    url: "https://github.com/yezz123"
+    username: "yezz123"
+  twitter:
+    url: "https://x.com/THyasser1"
+    username: "THyasser1"
+  linkedin:
+    url: "https://linkedin.com/in/yezz123"
+    username: "yezz123"
+  email:
+    url: "mailto:hello@yezz.me"
+    username: "hello@yezz.me"
+  steam:
+    url: "https://steamcommunity.com/id/yezz123"
+    username: "yezz123"
+
+# Navigation Configuration
+navigation:
+  items:
+    - name: "About"
+      href: "/about"
+      icon: "user"
+    - name: "Projects"
+      href: "/projects"
+      icon: "folder"
+    - name: "Blog"
+      href: "/blog"
+      icon: "book"
+    - name: "Talks"
+      href: "/talks"
+      icon: "mic"
+    - name: "Contact"
+      href: "/contact"
+      icon: "mail"
+
+# SEO Configuration
+seo:
+  robots:
+    index: true
+    follow: true
+    googleBot:
+      index: true
+      follow: true
+      maxVideoPreview: -1
+      maxImagePreview: "large"
+      maxSnippet: -1
+  openGraph:
+    type: "website"
+    locale: "en_US"
+    siteName: "Yasser Tahiri Portfolio"
+  twitter:
+    card: "summary_large_image"
+    creator: "@THyasser1"
+
+# Features Configuration
+features:
+  threejs: true
+  themeToggle: true
+  contactForm: true
+  calBooking: true
+  githubIntegration: true
+  mdxSupport: true
+
+# Footer Configuration
+footer:
+  copyright: "All rights reserved."
+  madeWith: "Made with ❤️ using Next.js"
+  pages:
+    - name: "Home"
+      href: "/"
+    - name: "About"
+      href: "/about"
+    - name: "Projects"
+      href: "/projects"
+    - name: "Blog"
+      href: "/blog"
+    - name: "Talks"
+      href: "/talks"
+  resources:
+    - name: "OSS"
+      href: "/oss"
+    - name: "Uses"
+      href: "/uses"
+    - name: "Tags"
+      href: "/tags"
+    - name: "Sitemap"
+      href: "/sitemap.xml"
+    - name: "Contact"
+      href: "/contact"
+
+# GitHub Configuration
+github:
+  username: "yezz123"
+  token: ""
+  pinnedRepos: 3
+  showStats: true
+  showCommitActivity: true
+  showLanguages: true

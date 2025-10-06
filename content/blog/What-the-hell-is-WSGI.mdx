@@ -1,0 +1,133 @@
+---
+title: 'What the Hell is WSGI Benchmark?'
+date: '2021-07-11'
+tags: ['WSGI', 'Python', 'Benchmark']
+featured: false
+excerpt: 'WSGI is the Web Server Gateway Interface. It is a specification that describes how a web server communicates with web applications, and how web applications can be chained together to process one request.'
+image: '/images/blog/08/02.jpg'
+---
+
+![wsgi-benchmark](/images/blog/08/01.gif)
+
+# What is WSGI?
+
+- WSGI is the Web Server Gateway Interface. It is a specification that describes how a web server communicates with web applications, and how web applications can be chained together to process one request.
+
+- To Understand the WSGI Concept check the [Wsgi Tutorial Codepoint](http://wsgi.tutorial.codepoint.net/intro) by [@Clodoaldo Pinto Neto.](https://github.com/ClodoaldoPinto)
+
+# The Benchmark
+
+- To make the test as clean as possible, we created a [Docker](https://gitlab.com/yezz123/benchmark/-/blob/master/Dockerfile) container to isolate the tested server from the rest of the system. In addition to sandboxing the WSGI server, this ensured that every run started with a clean slate.
+
+```dockerfile
+FROM python:3.8
+RUN apt-get -y update && apt-get -y install libev-dev
+ADD . /app
+RUN pip install -r /app/requirements.txt
+RUN pip install /app
+```
+
+- The [app](https://gitlab.com/yezz123/benchmark/-/blob/master/app.py) content:
+
+```py
+def application(environment, start_response):
+    """
+    The main WSGI Application. Doesn't really do anything
+    since we're benchmarking the servers, not this code :)
+    """
+
+    start_response(
+        '200 OK',  # Status
+        [('Content-type', 'text/plain'), ('Content-Length', '2')]  # Headers
+    )
+    return ['OK']
+```
+
+- The Benchmark test coded with `shell-Script` :
+
+```shell
+#!/bin/bash
+
+IP=192.168.122.140
+PORTS=(8000 8100 8200 8300 8400)
+CONNECTIONS=(100 500 1000 5000 10000)
+THREADS=8
+DURATION=30
+BASE=$1
+
+ulimit -n 10240
+
+function perf() {
+    echo "    Testing with $1 threads and $2 connections ..."
+    ./wrk --duration $DURATION --threads $1 --connections "$2" "http://$IP:$3" >"$3_$1_$2.log"
+}
+
+for connections in "${CONNECTIONS[@]}"; do
+    for port in "${PORTS[@]}"; do
+        perf "$THREADS" "$connections" "$port"
+        sleep 1
+    done
+done
+```
+
+### Requirements
+
+- install the requirements for testing the Gunicorn and the wsgi and CherryPy servers :
+
+```bash
+pip install -r requirements.txt
+```
+
+## Server
+
+- Isolated in a Docker container.
+
+- Allocated 3 CPU cores.
+
+- Container’s RAM was capped at 1024 MB.
+
+## Testing
+
+- The servers were tested in a random order with an increasing number of simultaneous connections, ranging from 1000 to 10,000.
+
+- Each test lasted 15 seconds and was repeated 2 times.
+
+> You can try more and Allocate more cores to run the tests & RAM.
+
+## Conclusion
+
+- The results of the test was Great, it showed that the Gunicorn server is the fastest & the WSGI server is the slowest, but not by much, so we can say that Gunicorn is the most performant server, but it is not the best choice for production, it is not the best choice for most of the web applications, but it is a good choice for a simple web application like this, which is not a high traffic web application, so it is a good choice for a simple web application like this.
+
+- To summarize, here are some general insights from the results of each server:
+
+- [x] Bjoern: Appears to live up to its claim as a “screamingly fast, ultra-lightweight WSGI server.”
+
+- [x] CherryPy: Fast performance, lightweight, and low errors. Not bad for pure Python.
+
+- [x] Gunicorn: A good, consistent performer for medium loads.
+
+- [x] Meinheld: Performs well and requires minimal resources. However, struggles at higher loads.
+
+- [x] mod_wsgi: Integrates well into Apache and performs admirably.
+
+### References
+
+- https://gitlab.com/yezz123/benchmark
+
+- https://www.python.org/dev/peps/pep-3333/
+
+- http://wsgi.tutorial.codepoint.net/intro
+
+- https://fgimian.github.io/blog/2018/06/05/python-api-framework-benchmarks/
+
+- https://fastapi.tiangolo.com/benchmarks/
+
+- https://www.appdynamics.com/blog/engineering/a-performance-analysis-of-python-wsgi-servers-part-2/
+
+- https://docs.djangoproject.com/en/3.2/topics/performance/
+
+- https://www.toptal.com/python/performance-optimization-testing-django
+
+- https://gist.github.com/nhymxu/814cf9b3294276629d2231248b709e26
+
+- http://klen.github.io/py-frameworks-bench/

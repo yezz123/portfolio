@@ -1,0 +1,56 @@
+---
+title: 'Cracking WPA/WPA2 Using the GPU'
+date: '2021-01-30'
+tags: ['Hacking', 'Security', 'guide']
+featured: false
+excerpt: 'We all know we can use aircrack-ng to run a wordlist attack to crack WPA/WPA2.
+In this article Im going to show you how to do the same using a tool called HashCat.'
+image: '/images/blog/02/01.png'
+---
+
+# Introduction
+
+We all know we can use aircrack-ng to run a wordlist attack to crack WPA/WPA2, in this article I'm going to show you how to do the same using a tool called HashCat, and compare its speed with aircrack-ng.
+
+The advantage of using HashCat is unlike aircrack-ng which uses the CPU to crack the key, HashCat uses the GPU, this makes the cracking process MUCH faster (results below).
+
+## Installing & using Hashcat
+
+- First, you need to download Hashcat from https://hashcat.net/hashcat/
+
+- Navigate to the location where you downloaded it, and unzip it, personally I like to use 7zip.
+
+- Open the Command Prompt (go to windows search and type cmd).
+
+- Navigate to your Hashcat folder where it's unzipped.
+
+- Type hashcat32.exe or hashcat64.exe depending on the architecture of your CPU.
+
+- In order to use the GPU, you need to get its id using the following command
+
+```
+hashcat64.exe -I
+```
+
+mine is #3. Then you need to use the hash type which is 2500 for WPA, I do recommend using
+
+```
+hashcat64.exe --help
+```
+
+to get familiar with the tool.
+
+To specify device use the -d argument and the number of your GPU.
+The command should look like this in end
+
+```
+hashcat64.exe -m 2500 -d 3 [handshake_file] example: Handshake.hccapx" [worldlist file] "example :eightdigit.txt
+```
+
+Example:
+
+```
+hashcat64.exe -m 2500 -d 3 Handshake.hccapx eightdigit.txt
+```
+
+Where Handshake.hccapx is my handshake file, and eithdigit.txt is my wordlist, you need to convert cap file to hccapx using
