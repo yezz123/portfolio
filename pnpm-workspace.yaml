@@ -1,0 +1,11 @@
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@tailwindcss/oxide'
+  - cwebp-bin
+  - esbuild
+  - mozjpeg
+  - pngquant-bin
+  - prisma
+  - sharp
+  - unrs-resolver
