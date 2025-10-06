@@ -1,0 +1,144 @@
+desk:
+  - name: "MacBook Pro 16-inch (M4 Max - Work)"
+    description: "M4 Max chip, 48GB RAM, 512GB SSD - My Work Machine"
+    icon: "💻"
+
+  - name: "MacBook Pro 14-inch (M1 Pro - Personal)"
+    description: "M1 Pro chip, 16GB RAM, 1TB SSD - My Personal Machine"
+    icon: "💻"
+
+  - name: "Custom Built PC (Gaming & AI models)"
+    description: "I7-14700K, 64GB RAM DDR5, 1TB SSD Samsung 990 Pro, RTX 4070 TI Super 16GB GDDR6X - My Gaming & AI Machine"
+    icon: "💻"
+
+  - name: "iPad Pro 12.9-inch (M2 - Personal)"
+    description: "M3 chip, 16GB RAM, 512GB SSD - I use it to read & watch movies with my Fiancé"
+    icon: "📱"
+
+  - name: "Iphone 16 Pro Max (Personal)"
+    description: "I use it to make calls & take photos My main phone 1TB storage"
+    icon: "📱"
+
+  - name: "AORUS CO49DQ 49-inch OLED (Work | Gaming)"
+    description: "4K monitor for coding and gaming, 4K 144Hz"
+    icon: "🖥️"
+
+  - name: "Logitech MX Master 3 (Work | Gaming)"
+    description: "Wireless mouse with excellent ergonomics for long coding sessions"
+    icon: "🖱️"
+
+  - name: "Keychron K2 (Work)"
+    description: "Mechanical keyboard with hot-swappable switches"
+    icon: "⌨️"
+
+  - name: "Razer Ornata V3 (Gaming)"
+    description: "Gaming keyboard with excellent ergonomics for long gaming sessions"
+    icon: "⌨️"
+
+  - name: "Razer Gigantus V2 Medium (Gaming)"
+    description: "Gaming pad for my mouse"
+    icon: "📃"
+
+  - name: "Sony WH-1000XM5 (Work)"
+    description: "Wireless noise-canceling headphones for long coding sessions"
+    icon: "🎧"
+  
+  - name: "Playstation Headset (Gaming)"
+    description: "Gaming headset for my PS5 & PC, TBH i find em pretty good"
+    icon: "🎧"
+
+  - name: "AirPods Pro (Personal)"
+    description: "Wireless earbuds for my phone, I use them to listen to music & podcasts"
+    icon: "🎧"
+
+home:
+  - name: "HomePod Mini"
+    description: "Smart speaker for music and ambient sounds while coding"
+    icon: "🔊"
+
+  - name: "Alexa Speaker"
+    description: "Helping me Control my Home"
+    icon: "💡"
+
+  - name: "Local Brand Desk"
+    description: "Helping me Work Better"
+    icon: "🪑"
+
+  - name: "Playstation 5"
+    description: "Helping me Relax & Play God of War one of my favorite games"
+    icon: "🎮"
+
+  - name: "Nintendo Switch OLED (Pokemon Edition)"
+    description: "Helping me Relax & Play Bunch of Mario & Zelda games"
+    icon: "🎮"
+
+  - name: "Ps4 Pro"
+    description: "I don't use it much but it's still here"
+    icon: "🎮"
+
+
+tools:
+  - name: "VS Code"
+    description: "Primary code editor with extensive extensions"
+    url: "https://code.visualstudio.com"
+    icon: "📝"
+
+  - name: "GitHub"
+    description: "Version control and collaboration platform"
+    url: "https://github.com"
+    icon: "🐙"
+
+  - name: "Vercel"
+    description: "Deployment and hosting platform"
+    url: "https://vercel.com"
+    icon: "▲"
+
+  - name: "Notion"
+    description: "Note-taking and project management"
+    url: "https://notion.so"
+    icon: "📋"
+
+  - name: "Linear"
+    description: "Issue tracking and project management"
+    url: "https://linear.app"
+    icon: "📊"
+
+  - name: "Python"
+    description: "Primary programming language"
+    url: "https://python.org"
+    icon: "🐍"
+
+  - name: "Rust"
+    description: "Programming language for building safe and fast software"
+    url: "https://rust-lang.org"
+    icon: "🦀"
+
+  - name: "AWS"
+    description: "Cloud computing platform"
+    url: "https://aws.amazon.com"
+    icon: "🌩️"
+
+  - name: "GCP"
+    description: "Cloud computing platform"
+    url: "https://gcp.google.com"
+    icon: "🌩️"
+
+  - name: "Docker"
+    description: "Containerization platform"
+    url: "https://docker.com"
+    icon: "🐳"
+
+  - name: "Kubernetes"
+    description: "Container orchestration platform"
+    url: "https://kubernetes.io"
+    icon: "🚀"
+
+  - name: "Slack"
+    description: "Communication platform for my team"
+    url: "https://slack.com"
+    icon: "💬"
+
+  - name: "Discord"
+    description: "Communication platform for my friends"
+    url: "https://discord.com"
+    icon: "💬"
