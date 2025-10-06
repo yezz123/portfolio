@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      npm-packages:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: ":arrow_up: chore: update dependencies [skip ci]"
+    labels:
+      - "dependencies"
