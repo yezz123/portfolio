@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Send } from "lucide-react";
 import Image from "next/image";
 import {
   Card,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { BlogPost } from "@/lib/data";
 import { safeDateFormat } from "@/lib/utils";
 import Link from "next/link";
@@ -20,6 +21,8 @@ import Link from "next/link";
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [comments, setComments] = useState<{ [key: string]: string[] }>({});
+  const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -37,6 +40,17 @@ export default function BlogPage() {
     };
     loadPosts();
   }, []);
+
+  const handleAddComment = (slug: string) => {
+    if (!newComment[slug]?.trim()) return;
+
+    setComments((prev) => ({
+      ...prev,
+      [slug]: [...(prev[slug] || []), newComment[slug]],
+    }));
+
+    setNewComment((prev) => ({ ...prev, [slug]: "" }));
+  };
 
   if (loading) {
     return (
@@ -147,12 +161,57 @@ export default function BlogPage() {
                 </CardHeader>
 
                 <CardContent>
-                  <Button variant="ghost" asChild className="w-full">
+                  <Button variant="ghost" asChild className="w-full mb-4">
                     <Link href={`/blog/${post.slug}`}>
                       Read More
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Link>
                   </Button>
+
+                  {/* Comment Section */}
+                  <div className="border-t pt-4">
+                    <h3 className="font-semibold mb-2 text-sm text-primary">
+                      Comments
+                    </h3>
+
+                    <div className="space-y-2 mb-3">
+                      {(comments[post.slug] || []).length === 0 ? (
+                        <p className="text-muted-foreground text-sm">
+                          No comments yet. Be the first to comment!
+                        </p>
+                      ) : (
+                        comments[post.slug].map((cmt, idx) => (
+                          <div
+                            key={idx}
+                            className="bg-muted p-2 rounded-md text-sm"
+                          >
+                            {cmt}
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Input
+                        placeholder="Add a comment..."
+                        value={newComment[post.slug] || ""}
+                        onChange={(e) =>
+                          setNewComment((prev) => ({
+                            ...prev,
+                            [post.slug]: e.target.value,
+                          }))
+                        }
+                        className="flex-1"
+                      />
+                      <Button
+                        onClick={() => handleAddComment(post.slug)}
+                        size="icon"
+                        variant="default"
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </motion.article>
