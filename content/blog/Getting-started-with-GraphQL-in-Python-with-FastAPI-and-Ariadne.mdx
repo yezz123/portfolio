@@ -1,0 +1,466 @@
+---
+title: 'Getting started with GraphQL in Python with FastAPI and Ariadne'
+date: '2021-10-05'
+tags: ['Python', 'GraphQL', 'FastAPI']
+featured: false
+excerpt: 'Generate a FullStack playground using FastAPI, GraphQL and Ariadne'
+image: '/images/blog/11/01.jpg'
+---
+
+FastAPI is a high-performance framework for building web APIs with Python. Its simple and intuitive nature makes it easy to quickly develop robust web APIs using very little boilerplate code. In this article, we’ll introduce FastAPI and how to set up a GraphQL server with it using Graphene & Ariadne.
+
+From the official docs, building web applications with FastAPI reduce about 40 percent of developer-induced errors, and this is made possible through the use of Python 3.6 type declarations. With all its features, including the automatic generation of interactive API documentation, building web apps with Python has never been easier.
+
+## Setting up our app
+
+Before we get started, let’s confirm that we have Python 3.7+ installed by running the following command on our terminal:
+
+```shell
+python --version
+```
+
+**Note:** If you don’t have it installed, get it [here](https://www.python.org/downloads/).
+
+- To build this project we will need the following Python packages:
+
+  - [FastAPI](https://fastapi.tiangolo.com/) - A fast, modern, and flexible framework for building web APIs with Python.
+  - [Ariadne](https://ariadnegraphql.org/) - A Python library for implementing GraphQL servers using schema-first approach.
+
+Let’s go ahead and install these packages in our virtual environment:
+
+```shell
+fastapi[uvicorn]
+ariadne
+```
+
+We install uvicorn with the “standard” option since that brings optional extras like WebSocket support.
+
+### Asynchronous servers in Python
+
+ASGI is an emerging standard for building asynchronous services in Python that support HTTP/2 and WebSocket. Web frameworks like Flask and Pyramid are examples of WSGI based frameworks and do not support ASGI. Django was for a long time a WSGI based framework but it has introduced ASGI support in version 3.1.
+
+- ASGI has two components:
+
+  - Protocol Server: Handles low level details of sockets, translating them to connections and relaying them to the application
+  - Application: A callable that is responsible for handling incoming requests. There are several ASGI frameworks that simplify building applications.
+
+As an application developer, you might find that you will be mostly working at the application and framework levels.
+
+Examples of ASGI servers include Uvicorn, Daphne and Hypercorn. Examples of ASGI frameworks include Starlette, Django channels, FastAPI and Quart.
+
+Ariadne provides a GraphQL class that implements an ASGI application so we will not need an ASGI framework. We will use the uvicorn server to run our application.
+
+**Note:** Understand the difference between ASGI and WSGI [Blog by Raoof Naushad](https://medium.com/analytics-vidhya/difference-between-wsgi-and-asgi-807158ed1d4c).
+
+### Async in Python using asyncio
+
+The asyncio library adds async support to Python. To declare a function as asynchronous, we add the keyword async before the function definition as follows:
+
+```py
+async def hello_world():
+    return "Hello world"
+```
+
+- Using `await`, we would call our asynchronous function as follows:
+
+```py
+obytes = await hello_world()
+```
+
+### Writing the GraphQL schema
+
+- Create a file called schema.graphql. We will use it to define our GraphQL schema.
+
+#### Custom types:
+
+Our schema will include five custom types, described below.
+
+```js
+type User {
+    id: ID! // This is the id of the user
+    email: String! // This is the email of the user
+    password: String! // This is the password of the user
+}
+
+type blog {
+    id: ID! // This is the id of the blog
+    title: String! // This is the title of the blog
+    description: String! // This is the description of the blog
+    completed: Boolean! // This is the completed status of the blog
+    ownerId: ID! // This is the id of the owner of the blog
+}
+
+type blogResult {
+    errors: [String] // This is the list of errors
+    blog: blog // This is the blog
+}
+
+type blogsResult {
+    errors: [String]
+    blogs: [blog] // This is the list of blogs
+}
+
+type InsertResult {
+    errors: [String]
+    id: ID // This is the id of the inserted blog
+}
+
+type TokenResult {
+    errors: [String]
+    token: String // This is the token
+}
+```
+
+- After Define the schema, lets add the Query, Mutation, Subscription and Type definitions.
+
+```js
+schema {
+    query: Query // This is the query type
+    mutation: Mutation // This is the mutation type
+    subscription: Subscription // This is the subscription type
+}
+
+type Query {
+    blogs: blogsResult! // This is the list of blogs
+    blog(blogId: ID!): blogResult! // This is the blog
+}
+
+type Mutation {
+    createblog(title: String!, description: String!): InsertResult! // This is the blog
+    createUser(email: String!, password: String!): InsertResult! // This is the user
+    createToken(email: String!, password: String!): TokenResult! // This is the token
+}
+
+type Subscription {
+    reviewblog(token:String!): InsertResult! // This is the blog
+}
+```
+
+### Setting up the project
+
+Create a file called `app.py` and add the code below:
+
+```py
+from ariadne import QueryType, make_executable_schema, load_schema_from_path
+from ariadne.asgi import GraphQL
+
+type_defs = load_schema_from_path("schema.graphql")
+
+query = QueryType()
+
+
+@query.field("hello")
+def resolve_hello(*_):
+    return "Hello world!"
+
+
+schema = make_executable_schema(type_defs, query)
+app = GraphQL(schema, debug=True)
+```
+
+We read the schema defined in the `schema.graphql` file and added a simple query called hello that we will use to test that our server is running. Our server is now ready to accept requests.
+
+- Start the server by running:
+
+```shell
+uvicorn app:app --reload
+```
+
+- Open the GraphQL PlayGround by visiting [http://localhost:8000](http://localhost:8000). Paste the hello query below and hit the “Play” button:
+
+```js
+query {
+  hello
+}
+```
+
+Congratulations, your GraphQL server is running 🥳!
+
+Once you confirm that the server is running fine, you can delete the `resolve_hello` function from `app.py` and delete the hello query in the type Query section of `schema.graphql`.
+
+### Storing users and blogs
+
+Since this article discusses GraphQL operations with an emphasis on subscriptions, we will skip the database component entirely and store our data in memory. We will use two variables for this:
+
+- users: A python dictionary where the keys are usernames and the values are the user details.
+- blogs: A python list which will store all blogs
+
+Create a file called `store.py.` Initialize users, blogs & queues to an empty list.
+
+```py
+users = {}
+blog = []
+queues = []
+```
+
+## Define API & GraphQL
+
+![GIF](https://media4.giphy.com/media/l3vR0vNPYoaxLT7OM/giphy.gif)
+
+### Defining the mutations
+
+Let’s add resolvers for the mutations defined in the schema. These will live inside a file called mutations.py. Go ahead and create it.
+
+First add the `createUser` resolver to mutations.py.
+
+```py
+from ariadne import ObjectType, convert_kwargs_to_snake_case
+
+from store import users, blogs
+
+mutation = ObjectType("Mutation")
+
+
+@mutation.field("createUser")
+@convert_kwargs_to_snake_case
+async def resolve_create_user(obj, info, email, password):
+    try:
+        if not users.get(username):
+            user = {
+                "id": len(users) + 1,
+                "email": email,
+                "password": password,
+            }
+            users[username] = user
+            return {
+                "success": True,
+                "user": user
+            }
+        return {
+            "success": False,
+            "errors": ["Username is taken"]
+        }
+
+    except Exception as error:
+        return {
+            "success": False,
+            "errors": [str(error)]
+        }
+```
+
+We import `ObjectType` and `convert_kwargs_to_snake_case` from the Ariadne package. `ObjectType` is used to define the mutation resolver, and `convert_kwargs_to_snake_case` recursively converts arguments case from `camelCase` to `snake_case`.
+
+We also import users and blogs from store.py, since these are the variables we will use as storage for our users and blogs.
+
+```py
+@mutation.field("createblog")
+@convert_kwargs_to_snake_case
+async def resolve_create_blog(obj, info, content, title, description, completed, ownerId):
+    try:
+        blog = {
+            "ID": id,
+            "title": title,
+            "description": description
+            "completed": completed,
+            "ownerId": ownerId
+        }
+        blogs.append(blog)
+        return {
+            "success": True,
+            "blog": blog
+        }
+    except Exception as error:
+        return {
+            "success": False,
+            "errors": [str(error)]
+        }
+```
+
+In `resolve_create_blog`, we create a dictionary that stores the attributes of the blog. We append it to the blogs list and return the created blog. If successful, we set success to True and return success and the created blog object. If there was an error, we set success to False and return success and the error blog.
+
+We now have our two resolvers, so we can point Ariadne to them. Make the following changes to app.py:
+
+At the top of the file, import the mutations:
+
+```py
+from mutations import mutation
+```
+
+Then add mutation to the list of arguments passed to `make_executable_schema`:
+
+```py
+schema = make_executable_schema(type_defs, query, mutation)
+```
+
+![Big Brain Time](https://c.tenor.com/N_bXE4MWdEMAAAAC/big-brain-markiplier.gif)
+
+### Defining the queries
+
+Now we are ready to implement the two queries of our API. Let’s start with the blogs query. Create a new file, queries.py and update it as follows:
+
+- Create `get_blogs` resolver.
+
+```py
+# as you know here i use Database[PostgreSQL] to connect to the database
+# Install psycopg2 & databases[postgresql] & asyncpg
+
+async def get_blogs(
+    skip: Optional[int] = 0, limit: Optional[int] = 100
+) -> Optional[Dict]:
+    query = blog.select(offset=skip, limit=limit)
+    result = await database.fetch_all(query=query)
+    return [dict(blog) for blog in result] if result else None
+
+async def get_blog(blog_id: int) -> Optional[Dict]:
+    query = blog.select().where(blog.c.id == int(blog_id))
+    result = await database.fetch_one(query=query)
+    return dict(result) if result else None
+```
+
+- then we could use it in our schema:
+
+```py
+from typing import Optional
+
+from ariadne import QueryType, convert_kwargs_to_snake_case
+
+from crud import get_blogs, get_blog # Create a file called crud.py and add the get_blogs function
+from schemas.error import MyGraphQLError
+
+
+@convert_kwargs_to_snake_case
+async def resolve_blogs(obj, info, skip: Optional[int] = 0, limit: Optional[int] = 100):
+    blogs = await get_blogs(skip=skip, limit=limit)
+
+    return {"blogs": blogs}
+
+
+@convert_kwargs_to_snake_case
+async def resolve_blog(obj, info, blog_id):
+    blog = await get_blog(blog_id=blog_id)
+
+    if not blog:
+        raise MyGraphQLError(code=404, message=f"blog id {blog_id} not found")
+
+    return {"success": True, "blog": blog}
+
+
+query = QueryType()
+query.set_field("blogs", resolve_blogs)
+query.set_field("blog", resolve_blog)
+```
+
+![Exactly](https://i.gifer.com/7FBO.gif)
+
+### Subscribing to new blogs
+
+New blogs are now being added to subscription queues, but we do not have any queues yet. All that is remaining is implementing our GraphQL subscription to create a queue and add it to the queues list, read blogs from it and push the appropriate ones to the GraphQL client.
+
+In Ariadne, we need to declare two functions for every subscription defined in the schema.
+
+#### Subscription source
+
+Create a new file, subscriptions.py and define our subscription source in it as follows:
+
+```py
+from ariadne import SubscriptionType, convert_kwargs_to_snake_case
+from graphql.type import GraphQLResolveInfo
+
+subscription = SubscriptionType()
+
+
+@convert_kwargs_to_snake_case
+@subscription.field("reviewblog")
+async def review_blog_resolver(review_blog, info: GraphQLResolveInfo, token: str):
+    return {"id": review_blog}
+```
+
+**Note:** create a dynamic Source Review for Blog, by using RabbitMQ.
+
+> Rabbit MQ is a messaging broker that allows you to publish and subscribe to messages.
+
+```py
+# This is Example from My Project FastQL
+@convert_kwargs_to_snake_case
+@subscription.source("reviewblog")
+async def review_blog_source(obj, info: GraphQLResolveInfo, token: str):
+    user = await security.get_current_user_by_auth_header(token)
+    if not user:
+        raise MyGraphQLError(code=401, message="User not authenticated")
+
+    while True:
+        blog_id = await rabbit.consumeblog()
+        if blog_id:
+            yield blog_id
+        else:
+            return
+```
+
+![Winner](https://i.gifer.com/RgnL.gif)
+
+All the hard work is done! Now comes the easy part; seeing the API in action. Open the GraphQL Playground by visiting http://localhost:8000.
+
+Let’s begin by creating two users, `user_one` and `user_two`. Paste the following mutation and hit play.
+
+```js
+mutation {
+  createUser(
+      email:"admin@graphql.com"
+      password:"admin"
+  ) {
+    success
+    user {
+      userId
+      email
+      password
+    }
+  }
+}
+```
+
+Once the first user is created, change the username in the mutation from `user_one` to `user_two` and hit play again to create the second user.
+
+Now we have two users who can Blog. Our `createBlog` mutation expects us to provide `senderId` and `recipientId`. If you looked at the responses from the `createUser` mutations you already know what IDs were assigned to them, but let’s assume we only know the usernames, so we will use the `userId` query to retrieve the IDs.
+
+```js
+query {
+  userId(
+      // User One
+      email: "admin@graphql.com"
+      password: "admin"
+  )
+}
+```
+
+- Publish your blog to the second user by using the `createBlog` mutation.
+
+```js
+mutation {
+  createBlog(
+    senderId: "1",
+    recipientId: "2",
+    title:"Blog number1"
+    description:"This is the first blog"
+    ownerId: "1"
+  ) {
+    success
+    blog {
+        title
+        description
+        ownerId
+        recipientId
+        senderId
+    }
+  }
+}
+```
+
+## Conclusion
+
+Congratulations for completing. We learnt about ASGI, how to add subscriptions to a GraphQL server built with Ariadne, and using `asyncio.Queue`.
+
+If you got any questions, please feel free to ask them in the comments.
+
+This was just a simple API to demonstrate how we can use subscriptions to add real time functionality to a GraphQL API. The API could be improved by adding a database, user authentication, allowing users to attach files in Blog, allowing users to delete Blog and adding user profiles.
+
+If you are wondering how you can incorporate a database to an async API, here are two options:
+
+- [aiosqlite](https://github.com/omnilib/aiosqlite): A friendly, async interface to sqlite databases.
+
+I can't wait to see what you build!
+
+![this-is-only-the-beginning-just-the-beginning](https://c.tenor.com/bY6sUG8cpjAAAAAd/this-is-only-the-beginning-just-the-beginning.gif)
+
+You could also get inspiration from this Project [FastQL](https://github.com/obytes/fastql).
+
+To be honest, this got quite long. If you are patient enough to read this full and find it interesting then please share it, and [Follow me on x](https://x.com/THyasser1) for the next articles.

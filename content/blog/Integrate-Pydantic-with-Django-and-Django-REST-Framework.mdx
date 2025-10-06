@@ -1,0 +1,350 @@
+---
+title: 'Integrate Pydantic with Django and Django REST Framework'
+date: '2021-12-14'
+tags: ['Pydantic', 'Python', 'Django', 'Django REST Framework']
+featured: true
+excerpt: 'Pydantic is a Pythonic data validation library that makes it easy to create data models and validate data.'
+image: '/images/blog/12/01.png'
+---
+
+Python has always been a dynamically typed language, which means you don’t have to specify data types for variables and function return values. [PEP 484](https://www.python.org/dev/peps/pep-0484/) introduced type hints — a way to make Python feel statically typed.
+
+While type hints can help structure your projects better, they are just that — hints — and by default do not affect the runtime. However, there is a way to force type checks on runtime, and we’ll explore it today, after dialing in on some basics.
+
+The function below takes and returns a string and is annotated as follows:
+
+```python
+def username(name: str) -> str:
+    return 'Hello' + name
+```
+
+In the function `username`, the argument `name` is expected to be of type `str` and the return type `str`. Subtypes are accepted as `arguments`.
+
+In this article we’ll explore how to use Pydantic with Django and Django REST Framework, and how to force type checks on runtime.
+
+## Pydantic
+
+[Pydantic](https://pydantic-docs.helpmanual.io/) is a Python package for data validation and settings management that's based on Python type hints. It enforces type hints at runtime, provides user-friendly errors, allows custom data types, and works well with many popular IDEs. It's extremely fast and easy to use as well!
+
+Let's look at an example:
+
+```python
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: int
+    name = str
+
+external_data = {
+    'id': '1',
+    'name': 'John Doe',
+}
+user = User(**external_data)
+```
+
+Here we’re creating a `User` model that has an `id` field of type `int` and a `name` field of type `str`.
+
+```shell
+print(user.id)
+>>> 1
+print(user.name)
+>>> John Doe
+```
+
+To learn more about Pydantic, be sure to read the [Overview page from the official docs](https://pydantic-docs.helpmanual.io/).
+
+## Pydantic with Django
+
+When coupled with Django, we can use Pydantic to ensure that only data that matches the defined `schemas` are used in our application.
+
+That's why we will use [Pyngo](https://pypi.org/project/pyngo/) an open source Python package help to integrate Pydantic with Django, and Django REST Framework, and give us multiple parameters to use with OpenAPI.
+
+![Born_to_do_this](https://i.gifer.com/Pghf.gif)
+
+## Getting Started
+
+To get started, we need to install Pyngo, as we know it's based on `Pydantic`, `Django`, and `typing_extensions`.
+
+just run the following command:
+
+```shell
+$ pip install pyngo
+```
+
+### Features
+
+- Using `Pydantic` to Build your Models in `Django` Project.
+- Using `OpenAPI` utilities to build `params` from a basic model.
+- Using `QueryDictModel` to build `Pydantic` models from a `QueryDict` object.
+- Propagate any errors from `Pydantic` in `Django Rest Framework`.
+
+## OpenAPI parameters
+
+`pyngo.openapi_params()` Build a List of `ParameterDict` describing the fields of a `pydantic.BaseModel.` By setting the fields according to the dictionary we have it before in `ParameterDict` class.
+
+Mostly this dictionary representing the fixed fields of an [OpenAPI parameter object](https://swagger.io/specification/#parameter-object).
+
+As variables we can use the following fields:
+
+- `name (str)` – The name of the parameter. Parameter names are case sensitive.
+- `in (Literal["query", "header", "path", "cookie"])` – The location of the parameter.
+- `description (str)` – A brief description of the parameter. This could contain examples of use.
+- `required (bool)` – Determines whether or not this parameter is required or optional.
+- `deprecated (bool)` – Determines whether or not the parameter is in the process of being removed from the specification.
+- `allowEmptyValue (bool)` – Determines whether or not the parameter value can be omitted (`null` or an empty string).
+
+### openapi_params()
+
+`pyngo.openapi_params()` can build params from a basic model:
+
+```python
+from pydantic import BaseModel
+from pyngo import openapi_params
+
+class Model(BaseModel):
+    id: int
+
+print(openapi_params(Model))
+```
+
+we will see that the response in `json` format, and `id` will be the name of the parameter, this is what we got in a basic model:
+
+```js
+;[
+  {
+    name: 'id',
+    in: 'query',
+    description: '',
+    required: True,
+    deprecated: False,
+    allowEmptyValue: False,
+  },
+]
+```
+
+Let's try to extand using `pyngo.ParameterDict.required` is set according to the type of the variable:
+
+```python
+from typing import Optional
+from pydantic import BaseModel
+from pyngo import openapi_params
+
+class Model(BaseModel):
+   required_param: int
+   optional_param: Optional[int]
+
+print(openapi_params(Model))
+```
+
+same result but we will see the changes in the `required` field:
+
+```js
+;[
+  {
+    allowEmptyValue: False,
+    deprecated: False,
+    description: '',
+    in: 'query',
+    name: 'required_param',
+    required: True,
+  },
+  {
+    allowEmptyValue: False,
+    deprecated: False,
+    description: '',
+    in: 'query',
+    name: 'optional_param',
+    required: False,
+  },
+]
+```
+
+We can also setup the other fields of the `ParameterDict` class:
+
+```python
+from pydantic import BaseModel, Field
+from pyngo import openapi_params
+
+class WithDescription(BaseModel):
+   described_param: str = Field(
+      description="Hello World Use Me!"
+   )
+
+class InPath(BaseModel):
+   path_param: str = Field(location="path")
+
+class WithDeprecated(BaseModel):
+   deprecated_field: bool = Field(deprecated=True)
+
+class WithNoAllowEmpty(BaseModel):
+   can_be_empty: bool = Field(allowEmptyValue=False)
+
+print(openapi_params(WithDescription)[0]["description"])
+print(openapi_params(InPath)[0]["in"])
+print(openapi_params(WithDeprecated)[0]["deprecated"])
+print(openapi_params(WithNoAllowEmpty)[0]["allowEmptyValue"])
+```
+
+and we will see the response:
+
+```shell
+>>> 'Hello World Use Me!'
+>>> 'path'
+>>> 'True'
+>>> 'False'
+```
+
+If we hardcoded the `ParameterDict` class, this can raise multiple errors:
+
+- `ValueError` – If any of the fields are complex types.
+- `ValueError` – If location is not a value supported by `ParameterDict.in`.
+- `ValueError` – If you try to set required to `False` on a field whose location is `"path"`.
+- `ValueError` – If you try to set `allowEmptyValue` on a field whose location is not `"query"`.
+
+![My-Brain-Hurts](https://thumbs.gfycat.com/DensePepperyFennecfox-max-1mb.gif)
+
+I know most of what we see right now need to get deep somehow in [OpenAPI](https://swagger.io/specification/#parameter-object), but we this is the simple way to build a `ParameterDict` class.
+
+## Django QueryDictModel
+
+In an `HttpRequest` object, the `GET` and `POST` attributes are instances of `django.http.QueryDict`, a dictionary-like class customized to deal with multiple values for the same key. This is necessary because some HTML form elements, notably `<select multiple>`, pass multiple values for the same key.
+
+The `QueryDicts` at `request.POST` and `request.GET` will be immutable when accessed in a normal `request/response` cycle. To get a mutable version you need to use `QueryDict.copy()`.
+
+This is how the official Django documentation explain it, that's why `pyngo` come with idea of `pyngo.querydict_to_dict()` and `pyngo.QueryDictModel` are conveniences for building a `pydantic.BaseModel` from a `django.QueryDict`.
+
+let's see how it works, we will use the following model:
+
+```python
+from django.http import QueryDict
+
+class Model(QueryDictModel):
+    id: int
+    name: str
+
+Model.parse_obj(QueryDict("id=12&name=yezz"))
+```
+
+the result is:
+
+```shell
+>>> Model(id=12, name='yezz')
+```
+
+Convert a `Django.http.QueryDict` to a dict under the constraints introduced on the types of fields of a `pydantic.BaseModel`.
+
+Let's took a look at the `pyngo.querydict_to_dict()` and `pyngo.QueryDictModel` function:
+
+**Note**: Don't forget to Setup the [Django Project](https://docs.djangoproject.com/en/4.0/topics/install/).
+
+```python
+from typing import List
+from django.http import QueryDict
+from pydantic import BaseModel
+from pyngo import QueryDictModel, querydict_to_dict
+
+class Model(BaseModel):
+   single_param: int
+   list_param: List[str]
+
+class QueryModel(QueryDictModel):
+   single_param: int
+   list_param: List[str]
+
+query_dict = QueryDict("single_param=20&list_param=Life")
+
+print(Model.parse_obj(querydict_to_dict(query_dict, Model)))
+print(QueryModel.parse_obj(query_dict))
+```
+
+as a result we will see:
+
+```shell
+>>> Model(single_param=20, list_param=['Life'])
+>>> QueryModel(single_param=20, list_param=['Life'])
+```
+
+This is a very simple way to build a `pydantic.BaseModel` from a `django.http.QueryDict`.
+
+## ValidationError in Django REST Framework
+
+Extracting the arguments from a `pydantic.ValidationError` and convert them to a dictionary whose format matches those used by the details for an error in `Django Rest Framework`, this work is done by creating this function `pyngo.drf_error_details` and calling it on the `pydantic.ValidationError`:
+
+- `pyngo.drf_error_details()` will propagate any errors from Pydantic:
+
+```python
+from pydantic import BaseModel, ValidationError
+from pyngo import drf_error_details
+
+class Model(BaseModel):
+   id: int
+   name: str
+
+data = {"id": "Cat"}
+
+try:
+   Model.parse_obj(data)
+except ValidationError as e:
+   print(drf_error_details(e))
+```
+
+As a result we will see:
+
+```js
+{
+    'name': ['field required'],
+    'id': ['value is not a valid integer']
+}
+```
+
+- Let's see the Errors descend into nested fields:
+
+```python
+from typing import List
+from pydantic import BaseModel, ValidationError
+from pyngo import drf_error_details
+
+class Framework(BaseModel):
+   id: int
+
+class Language(BaseModel):
+   framework: List[Framework]
+
+data = {"Framework": [{"id": "not_a_number"}]}
+
+try:
+   Framework.parse_obj(data)
+except ValidationError as e:
+   print(drf_error_details(e))
+```
+
+We will see:
+
+```js
+{
+    'framework': {
+        '0': {
+            'id': ['value is not a valid integer']
+        },
+        '1': {
+            'id': ['field required']
+        }
+    }
+}
+```
+
+![The_End](https://i.gifer.com/6tkG.gif)
+
+To Integrate Pydantic with Django or Django Rest Framework, try to see some articles or pre-built packages like [Djantic](https://pypi.org/project/djantic/) or [Django-Ninja](https://pypi.org/project/django-ninja/) a web framework for building APIs with Django and Python 3.6+ type hints inspired by FastAPI.
+
+In this article we just take a deep look into my pre-built package thats could help you integrate pydantic with Django and Django Rest Framework Natively.
+
+### Resources:
+
+- [Swagger - parameter-object](https://swagger.io/specification/#parameter-object)
+- [Django - querydict-objects](https://docs.djangoproject.com/en/4.0/ref/request-response/#querydict-objects)
+- [Kite - django.http.QueryDict](https://www.kite.com/python/docs/django.http.QueryDict)
+- [Documentation - Typing](https://docs.python.org/3/library/typing.html)
+- [Documentation - Pydantic](https://pydantic-docs.helpmanual.io/)
+- [TestDriven - Django & Pydantic](https://testdriven.io/blog/django-and-pydantic/)
+- [Pypi - Pyngo](https://pypi.org/project/pyngo/)
