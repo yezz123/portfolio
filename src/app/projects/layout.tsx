@@ -13,11 +13,21 @@ export async function generateMetadata(): Promise<Metadata> {
       description: `Explore the featured projects by ${personal.name}, a ${personal.title}. ${personal.bio}`,
       type: "website",
       url: `${config.site?.url || ""}/projects`,
+      images: [
+        {
+          url: `${config.site?.url || ""}/images/og/og.PNG`,
+          width: 1200,
+          height: 630,
+          alt: `Projects - ${personal.name}`,
+          type: "image/png",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `Projects - ${personal.name}`,
       description: `Explore the featured projects by ${personal.name}, a ${personal.title}. ${personal.bio}`,
+      images: [`${config.site?.url || ""}/images/og/og.PNG`],
     },
   };
 }

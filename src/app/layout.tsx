@@ -52,12 +52,22 @@ export async function generateMetadata(): Promise<Metadata> {
       title: site.title || `${personal.name} - ${personal.title}`,
       description: site.description || personal.bio,
       siteName: site.title || `${personal.name} Portfolio`,
+      images: [
+        {
+          url: `${site.url || personal.website}/images/og/og.PNG`,
+          width: 1200,
+          height: 630,
+          alt: `${personal.name} - ${personal.title}`,
+          type: "image/png",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: site.title || `${personal.name} - ${personal.title}`,
       description: site.description || personal.bio,
       creator: `@${personal.twitter}`,
+      images: [`${site.url || personal.website}/images/og/og.PNG`],
     },
     robots: {
       index: true,
