@@ -56,7 +56,7 @@ export function HeroSection() {
     },
   ];
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+    <section className="relative min-h-0 md:min-h-screen flex items-start md:items-center justify-center overflow-hidden bg-background py-20 md:py-0">
       {/* Subtle background pattern */}
       <div
         className="absolute inset-0 z-0 w-full h-full"
@@ -66,7 +66,7 @@ export function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pb-24 md:pb-0">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -224,7 +224,7 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - fixed to small screens*/}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
