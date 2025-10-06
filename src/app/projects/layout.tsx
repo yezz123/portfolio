@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: `${config.site?.url || ""}/projects`,
       images: [
         {
-          url: `${config.site?.url || ""}/images/og/og.PNG`,
+          url: `${config.site?.url || ""}/images/og/og.jpeg`,
           width: 1200,
           height: 630,
           alt: `Projects - ${personal.name}`,
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: `Projects - ${personal.name}`,
       description: `Explore the featured projects by ${personal.name}, a ${personal.title}. ${personal.bio}`,
-      images: [`${config.site?.url || ""}/images/og/og.PNG`],
+      images: [`${config.site?.url || ""}/images/og/og.jpeg`],
     },
   };
 }

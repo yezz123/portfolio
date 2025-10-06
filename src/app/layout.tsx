@@ -54,7 +54,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: site.title || `${personal.name} Portfolio`,
       images: [
         {
-          url: `${site.url || personal.website}/images/og/og.PNG`,
+          url: `${site.url || personal.website}/images/og/og.jpeg`,
           width: 1200,
           height: 630,
           alt: `${personal.name} - ${personal.title}`,
@@ -67,7 +67,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: site.title || `${personal.name} - ${personal.title}`,
       description: site.description || personal.bio,
       creator: `@${personal.twitter}`,
-      images: [`${site.url || personal.website}/images/og/og.PNG`],
+      images: [`${site.url || personal.website}/images/og/og.jpeg`],
     },
     robots: {
       index: true,

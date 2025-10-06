@@ -3,7 +3,7 @@ import { loadConfig } from "@/lib/yaml-loader";
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await loadConfig();
-  const personal = config.personal;
+  const {personal} = config;
 
   return {
     title: `Tags - ${personal.name}`,

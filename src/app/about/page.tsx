@@ -154,7 +154,7 @@ export default function AboutPage() {
               onClick={() => setIsImageModalOpen(true)}
             >
               <Image
-                src="/images/og/og.PNG"
+                src="/images/og/og.jpeg"
                 alt="About Banner"
                 width={1200}
                 height={630}
@@ -406,7 +406,7 @@ export default function AboutPage() {
             >
               <div className="relative">
                 <Image
-                  src="/images/og/og.PNG"
+                  src="/images/og/og.jpeg"
                   alt="About Banner - Full Size"
                   width={1200}
                   height={630}
