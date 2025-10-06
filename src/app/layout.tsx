@@ -10,6 +10,7 @@ import { KeyboardShortcutsProvider } from "@/components/keyboard-shortcuts-provi
 import { MouseCursor } from "@/components/mouse-cursor";
 import { loadConfig } from "@/lib/yaml-loader";
 import { GoogleAnalytics } from "@/components/analytics";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -170,6 +171,7 @@ export default function RootLayout({
           </KeyboardShortcutsProvider>
         </ThemeProvider>
         <GoogleAnalytics />
+        <Analytics />
         <script
           dangerouslySetInnerHTML={{
             __html: `
