@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
@@ -61,13 +62,18 @@ export async function GET(request: NextRequest) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "24px",
-                fontWeight: "bold",
-                color: "white",
                 marginRight: "20px",
               }}
             >
-              YT
+              <Image
+                src={`${new URL(request.url).origin}/icon.svg`}
+                alt="Logo"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  filter: "brightness(0) invert(1)",
+                }}
+              />
             </div>
             <div
               style={{
