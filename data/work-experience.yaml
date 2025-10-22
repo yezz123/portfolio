@@ -1,11 +1,11 @@
-- company: "StackAI Inc."
-  position: "AI Engineer"
-  startDate: "2025-09-15"
+- company: "Yezz LLC."
+  position: "Founder & Software Engineer"
+  startDate: "2021-01-17"
   endDate: null
-  description: "I joined StackAI as an AI Engineer, focusing on working & collaborating with my teammates to make AI Accessible to everyone."
-  technologies: ["Python", "FastAPI", "Azure", "Docker", "Kubernetes"]
-  logoUrl: "/images/companies/stackai.svg"
-  url: "https://stackai.com"
+  description: "In January 2021, I registered Yezz LLC. as my first single-proprietor LLC in Delaware, USA. I work with customers worldwide to help them craft performant Web and DevOps apps using several technologies."
+  technologies: ["Python", "FastAPI", "AWS", "Docker", "Kubernetes"]
+  logoUrl: "/images/companies/yezz-llc.png"
+  url: "https://yezz.me"
 
 - company: "Pragma Labs."
   position: "Founding Software Engineer"
@@ -16,12 +16,3 @@
     ["Python", "Rust", "Docker", "Kubernetes", "FastAPI", "GCP", "AWS"]
   logoUrl: "/images/companies/pragma.svg"
   url: "https://pragma.build"
-
-- company: "Yezz LLC."
-  position: "Founder & Software Engineer"
-  startDate: "2021-01-17"
-  endDate: null
-  description: "In January 2021, I registered Yezz LLC. as my first single-proprietor LLC in Delaware, USA. I work with customers worldwide to help them craft performant Web and DevOps apps using several technologies."
-  technologies: ["Python", "FastAPI", "AWS", "Docker", "Kubernetes"]
-  logoUrl: "/images/companies/yezz-llc.png"
-  url: "https://yezz.me"

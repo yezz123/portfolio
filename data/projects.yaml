@@ -1,7 +1,7 @@
 - id: "0d Finance"
   name: "0d Finance"
   description: "0D Finance is a DeFi curator building institutional-grade vault strategies on Starknet."
-  url: "https://docs.0d.finance"
+  url: "https://0d.finance"
   technologies: ["Rust", "Terraform", "Starknet", "Docker", "Kubernetes"]
   imageUrl: "/images/projects/0d.jpg"
   featured: true
