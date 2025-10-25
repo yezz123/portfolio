@@ -100,6 +100,7 @@ features:
   calBooking: true
   githubIntegration: true
   mdxSupport: true
+  chatgptSummarization: true
 
 # Footer Configuration
 footer:
@@ -136,3 +137,11 @@ github:
   showStats: true
   showCommitActivity: true
   showLanguages: true
+
+# ChatGPT Configuration
+chatgpt:
+  enabled: true
+  apiKey: ""  # Set your OpenAI API key here or in environment variables
+  model: "gpt-3.5-turbo"
+  maxTokens: 150
+  temperature: 0.7
