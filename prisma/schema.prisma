@@ -19,6 +19,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Relations
+  comments Comment[]
+
   @@map("users")
 }
 
@@ -40,6 +43,7 @@ model BlogPost {
   // Relations
   likes    BlogLike[]
   dislikes BlogDislike[]
+  comments Comment[]
 
   @@map("blog_posts")
 }
@@ -64,6 +68,25 @@ model BlogDislike {
   blog BlogPost @relation(fields: [blogId], references: [id], onDelete: Cascade)
 
   @@map("blog_dislikes")
+}
+
+// Comment system with replies
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  blogId    String
+  userId    String
+  parentId  String?  // For replies
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  blog   BlogPost @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentReplies")
+
+  @@map("comments")
 }
 
 
