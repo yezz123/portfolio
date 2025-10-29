@@ -19,9 +19,9 @@ personal:
 # Contact & Booking Configuration
 contact:
   email: "hello@yezz.me"
-  calUsername: "yezz123"
+  calUsername: "ytahiri"
   responseTime: "48 hours"
-  availableForWork: false
+  availableForWork: true
 
 # Site Configuration
 site:
