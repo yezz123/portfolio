@@ -11,6 +11,7 @@ import { MouseCursor } from "@/components/mouse-cursor";
 import { loadConfig } from "@/lib/yaml-loader";
 import { GoogleAnalytics } from "@/components/analytics";
 import { Analytics } from "@vercel/analytics/next";
+import { AuthProvider } from "@/contexts/auth-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -171,14 +172,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <KeyboardShortcutsProvider>
-            <MouseCursor />
-            <Navigation />
-            <main className="pt-16">{children}</main>
-            <Footer />
-            <DynamicCalBadge />
-            <Toaster />
-          </KeyboardShortcutsProvider>
+          <AuthProvider>
+            <KeyboardShortcutsProvider>
+              <MouseCursor />
+              <Navigation />
+              <main className="pt-16">{children}</main>
+              <Footer />
+              <DynamicCalBadge />
+              <Toaster />
+            </KeyboardShortcutsProvider>
+          </AuthProvider>
         </ThemeProvider>
         <GoogleAnalytics />
         <Analytics />

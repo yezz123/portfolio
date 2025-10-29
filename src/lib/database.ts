@@ -8,7 +8,7 @@ if (typeof window !== "undefined") {
 }
 
 // Helper function to get or create blog post by slug
-async function getOrCreateBlogPost(blogSlug: string) {
+export async function getOrCreateBlogPost(blogSlug: string) {
   if (!prisma) throw new Error("Database not available");
 
   // Try to find existing blog post

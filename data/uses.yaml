@@ -1,10 +1,6 @@
 desk:
-  - name: "MacBook Pro 16-inch (M4 Max - Work)"
-    description: "M4 Max chip, 48GB RAM, 512GB SSD - My Work Machine"
-    icon: "💻"
-
-  - name: "MacBook Pro 14-inch (M1 Pro - Personal)"
-    description: "M1 Pro chip, 16GB RAM, 1TB SSD - My Personal Machine"
+  - name: "MacBook Pro 14-inch (M1 Pro - Work)"
+    description: "M1 Pro chip, 16GB RAM, 1TB SSD - My Work Machine"
     icon: "💻"
 
   - name: "Custom Built PC (Gaming & AI models)"
@@ -12,7 +8,7 @@ desk:
     icon: "💻"
 
   - name: "iPad Pro 12.9-inch (M2 - Personal)"
-    description: "M3 chip, 16GB RAM, 512GB SSD - I use it to read & watch movies with my Fiancé"
+    description: "M2 chip, 16GB RAM, 512GB SSD - I use it to read & watch movies with my Fiancé"
     icon: "📱"
 
   - name: "Iphone 16 Pro Max (Personal)"
@@ -39,10 +35,10 @@ desk:
     description: "Gaming pad for my mouse"
     icon: "📃"
 
-  - name: "Sony WH-1000XM5 (Work)"
+  - name: "Sony WH-1000XM6 (Work)"
     description: "Wireless noise-canceling headphones for long coding sessions"
     icon: "🎧"
-  
+
   - name: "Playstation Headset (Gaming)"
     description: "Gaming headset for my PS5 & PC, TBH i find em pretty good"
     icon: "🎧"
