@@ -2,6 +2,31 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getOrCreateBlogPost } from "@/lib/database";
 
+async function verifyTurnstile(token: string): Promise<boolean> {
+  try {
+    const secretKey = process.env.TURNSTILE_SECRET_KEY;
+    if (!secretKey) {
+      return false;
+    }
+
+    const response = await fetch(
+      `https://challenges.cloudflare.com/turnstile/v0/siteverify`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `secret=${secretKey}&response=${token}`,
+      },
+    );
+
+    const data = await response.json();
+    return data.success === true;
+  } catch {
+    return false;
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -80,6 +105,7 @@ export async function POST(request: NextRequest) {
       userEmail,
       userName,
       userAvatar,
+      turnstileToken,
     } = await request.json();
 
     if (!content || !blogId || !userId) {
@@ -87,6 +113,24 @@ export async function POST(request: NextRequest) {
         { error: "Content, blogId, and userId are required" },
         { status: 400 },
       );
+    }
+
+    // Verify Turnstile (only if secret key is configured)
+    if (process.env.TURNSTILE_SECRET_KEY) {
+      if (!turnstileToken) {
+        return NextResponse.json(
+          { error: "Verification required" },
+          { status: 400 },
+        );
+      }
+
+      const isTurnstileValid = await verifyTurnstile(turnstileToken);
+      if (!isTurnstileValid) {
+        return NextResponse.json(
+          { error: "Verification failed" },
+          { status: 400 },
+        );
+      }
     }
 
     if (!prisma) {
