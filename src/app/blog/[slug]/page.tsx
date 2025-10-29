@@ -12,6 +12,7 @@ import { BlogPost } from "@/lib/data";
 import { safeDateFormat } from "@/lib/utils";
 import { BlogInteractions } from "@/components/blog-interactions";
 import { CodeBlockScript } from "@/components/code-block";
+import { CommentSection } from "@/components/comments/comment-section";
 import Link from "next/link";
 
 interface BlogPostPageProps {
@@ -220,11 +221,22 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           />
         </motion.div>
 
+        {/* Comments Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="mt-16 pt-8"
+        >
+          <Separator className="mb-8" />
+          <CommentSection blogId={resolvedParams.slug} />
+        </motion.section>
+
         {/* Article Footer */}
         <motion.footer
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
           className="mt-16 pt-8"
         >
           <Separator className="mb-8" />

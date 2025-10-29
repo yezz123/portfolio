@@ -28,12 +28,12 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
+    webpackMemoryOptimizations: true,
     optimizePackageImports: [
       "@/components/ui",
       "lucide-react",
       "framer-motion",
     ],
-    mdxRs: true,
     optimizeCss: true,
   },
   compiler: {
@@ -126,6 +126,11 @@ const nextConfig: NextConfig = {
         path: false,
         os: false,
         crypto: false,
+        buffer: false,
+        stream: false,
+        util: false,
+        url: false,
+        querystring: false,
       };
     }
     return config;
@@ -133,9 +138,10 @@ const nextConfig: NextConfig = {
 };
 
 const withMDX = createMDX({
+  extension: /\.(md|mdx)$/,
   options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
+    remarkPlugins: ["remark-frontmatter", ["remark-mdx-frontmatter"]],
+    rehypePlugins: [["rehype-expressive-code"]],
   },
 });
 
