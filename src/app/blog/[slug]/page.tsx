@@ -13,6 +13,7 @@ import { safeDateFormat } from "@/lib/utils";
 import { BlogInteractions } from "@/components/blog-interactions";
 import { CodeBlockScript } from "@/components/code-block";
 import { CommentSection } from "@/components/comments/comment-section";
+import { BlogSummarizeButton } from "@/components/blog-summarize-button";
 import Link from "next/link";
 
 interface BlogPostPageProps {
@@ -181,7 +182,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             {post.featured && <Badge variant="default">Featured</Badge>}
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap items-center gap-2 mb-8">
             {post.tags &&
               Array.isArray(post.tags) &&
               post.tags.map((tag) => (
@@ -189,6 +190,11 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                   {tag}
                 </Badge>
               ))}
+            <BlogSummarizeButton
+              blogSlug={resolvedParams.slug}
+              content={post.content}
+              title={post.title}
+            />
           </div>
 
           <Separator />

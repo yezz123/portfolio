@@ -88,6 +88,7 @@ export interface PortfolioConfig {
     calBooking?: boolean;
     githubIntegration?: boolean;
     mdxSupport?: boolean;
+    chatgptSummarization?: boolean;
   };
   github?: {
     username?: string;
@@ -96,6 +97,13 @@ export interface PortfolioConfig {
     showStats?: boolean;
     showCommitActivity?: boolean;
     showLanguages?: boolean;
+  };
+  chatgpt?: {
+    enabled?: boolean;
+    apiKey?: string;
+    model?: string;
+    maxTokens?: number;
+    temperature?: number;
   };
   footer?: {
     copyright?: string;
