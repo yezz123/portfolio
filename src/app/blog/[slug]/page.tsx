@@ -12,8 +12,8 @@ import { BlogPost } from "@/lib/data";
 import { safeDateFormat } from "@/lib/utils";
 import { BlogInteractions } from "@/components/blog-interactions";
 import { CodeBlockScript } from "@/components/code-block";
-import { ChatGPTSummary } from "@/components/chatgpt-summary";
 import { CommentSection } from "@/components/comments/comment-section";
+import { BlogSummarizeButton } from "@/components/blog-summarize-button";
 import Link from "next/link";
 
 interface BlogPostPageProps {
@@ -182,7 +182,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             {post.featured && <Badge variant="default">Featured</Badge>}
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap items-center gap-2 mb-8">
             {post.tags &&
               Array.isArray(post.tags) &&
               post.tags.map((tag) => (
@@ -190,6 +190,11 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                   {tag}
                 </Badge>
               ))}
+            <BlogSummarizeButton
+              blogSlug={resolvedParams.slug}
+              content={post.content}
+              title={post.title}
+            />
           </div>
 
           <Separator />
@@ -206,16 +211,6 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             <div dangerouslySetInnerHTML={{ __html: post.content || "" }} />
           </div>
         </motion.article>
-
-        {/* ChatGPT Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.22 }}
-          className="my-8"
-        >
-          <ChatGPTSummary content={post.content} title={post.title} />
-        </motion.div>
 
         {/* Blog Interactions */}
         <motion.div

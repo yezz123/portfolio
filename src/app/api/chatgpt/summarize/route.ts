@@ -109,20 +109,22 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify Turnstile token
-    if (!turnstileToken) {
-      return NextResponse.json(
-        { error: "Verification required" },
-        { status: 400 },
-      );
-    }
+    // Verify Turnstile token (only if secret key is configured)
+    if (process.env.TURNSTILE_SECRET_KEY) {
+      if (!turnstileToken) {
+        return NextResponse.json(
+          { error: "Verification required" },
+          { status: 400 },
+        );
+      }
 
-    const isTurnstileValid = await verifyTurnstile(turnstileToken);
-    if (!isTurnstileValid) {
-      return NextResponse.json(
-        { error: "Verification failed" },
-        { status: 400 },
-      );
+      const isTurnstileValid = await verifyTurnstile(turnstileToken);
+      if (!isTurnstileValid) {
+        return NextResponse.json(
+          { error: "Verification failed" },
+          { status: 400 },
+        );
+      }
     }
 
     const openaiApiKey = config.chatgpt?.apiKey || process.env.OPENAI_API_KEY;
