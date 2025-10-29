@@ -42,7 +42,7 @@
     "start": "NODE_OPTIONS='--no-deprecation' next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "db:generate": "prisma generate",
+    "db:generate": "prisma generate --no-engine",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio"
