@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, X, Bot, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -188,7 +187,7 @@ export function BlogSummarizeButton({
         disabled={isLoading}
         variant="outline"
         size="sm"
-        className="gap-2 text-xs"
+        className="gap-2 text-sm bg-transparent border-black/10 dark:border-white/10 text-gray-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/10"
       >
         {isLoading ? (
           <>
@@ -211,107 +210,97 @@ export function BlogSummarizeButton({
       <AnimatePresence>
         {showCard && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-md"
-            onClick={handleClose}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.2 }}
+            className="mt-4 w-full"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.2 }}
-              onClick={(e) => e.stopPropagation()}
-              className="max-w-2xl w-full"
-            >
-              <Card className="border border-white/20 dark:border-white/10 bg-white/10 dark:bg-gray-900/70 backdrop-blur-xl shadow-2xl shadow-black/20 dark:shadow-black/50">
-                <CardHeader className="pb-3 bg-white/5 dark:bg-white/5 border-b border-white/10 dark:border-white/5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Bot className="w-5 h-5 text-purple-500 dark:text-purple-400" />
-                      <CardTitle className="text-lg font-bold text-gray-900 dark:text-white">
-                        AI Summary
-                      </CardTitle>
-                      <Badge
-                        variant="secondary"
-                        className="text-xs bg-white/90 text-gray-900 dark:bg-white/10 dark:text-white dark:border-white/20"
-                      >
-                        ChatGPT
-                      </Badge>
+            <div className="w-full rounded-2xl border border-black/15 dark:border-white/10 bg-white/70 dark:bg-white/10 backdrop-blur-2xl p-4 shadow-sm">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10 dark:border-white/10">
+                <div className="flex items-center gap-2">
+                  <Bot className="w-5 h-5" />
+                  <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                    AI Summary
+                  </span>
+                  <Badge
+                    variant="secondary"
+                    className="text-xs bg-transparent text-gray-900 dark:text-white border border-black/15 dark:border-white/15"
+                  >
+                    ChatGPT
+                  </Badge>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleClose}
+                  className="h-8 w-8 p-0 hover:bg-white/10 dark:hover:bg-white/10 text-gray-700 dark:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <div className="pt-4">
+                {showTurnstile && !turnstileToken ? (
+                  <div className="flex flex-col items-center py-4 space-y-3">
+                    <p className="text-sm text-gray-800 dark:text-gray-100 text-center">
+                      Please complete the verification to generate summary
+                    </p>
+                    {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                      <Turnstile
+                        ref={turnstileRef}
+                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                        onSuccess={handleTurnstileChange}
+                        onError={() => setTurnstileToken(null)}
+                        onExpire={() => setTurnstileToken(null)}
+                      />
+                    )}
+                  </div>
+                ) : isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="text-center space-y-3">
+                      <Loader2 className="w-8 h-8 animate-spin mx-auto" />
+                      <p className="text-sm text-gray-800 dark:text-gray-100">
+                        Generating summary...
+                      </p>
                     </div>
+                  </div>
+                ) : error ? (
+                  <div className="text-gray-900 dark:text-white text-sm">
+                    <p className="font-semibold mb-2">
+                      Error generating summary:
+                    </p>
+                    <p>{error}</p>
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
-                      onClick={handleClose}
-                      className="h-8 w-8 p-0 hover:bg-white/10 dark:hover:bg-white/10 text-gray-700 dark:text-white"
+                      onClick={() => {
+                        setError(null);
+                        setShowTurnstile(
+                          !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+                        );
+                        setTurnstileToken(null);
+                        resetTurnstile();
+                      }}
+                      className="mt-3 border-black/10 dark:border-white/10 text-gray-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/10"
                     >
-                      <X className="w-4 h-4" />
+                      Try Again
                     </Button>
                   </div>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  {showTurnstile && !turnstileToken ? (
-                    <div className="flex flex-col items-center py-4 space-y-3">
-                      <p className="text-sm text-gray-700 dark:text-gray-200 text-center">
-                        Please complete the verification to generate summary
+                ) : summary ? (
+                  <div className="space-y-3">
+                    <p className="text-base leading-relaxed text-gray-900 dark:text-gray-100">
+                      {summary}
+                    </p>
+                    <div className="flex items-center justify-between pt-4 border-t border-white/10 dark:border-white/10">
+                      <p className="text-xs text-gray-700 dark:text-gray-300">
+                        Generated by AI • May not be 100% accurate
                       </p>
-                      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-                        <Turnstile
-                          ref={turnstileRef}
-                          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                          onSuccess={handleTurnstileChange}
-                          onError={() => setTurnstileToken(null)}
-                          onExpire={() => setTurnstileToken(null)}
-                        />
-                      )}
                     </div>
-                  ) : isLoading ? (
-                    <div className="flex items-center justify-center py-8">
-                      <div className="text-center space-y-3">
-                        <Loader2 className="w-8 h-8 animate-spin mx-auto text-purple-600 dark:text-purple-400" />
-                        <p className="text-sm text-gray-700 dark:text-gray-200">
-                          Generating summary...
-                        </p>
-                      </div>
-                    </div>
-                  ) : error ? (
-                    <div className="text-red-700 dark:text-red-400 text-sm">
-                      <p className="font-medium mb-2">
-                        Error generating summary:
-                      </p>
-                      <p>{error}</p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setError(null);
-                          setShowTurnstile(
-                            !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-                          );
-                          setTurnstileToken(null);
-                          resetTurnstile();
-                        }}
-                        className="mt-3 border-white/20 dark:border-white/10 text-gray-900 dark:text-white hover:bg-white/10 dark:hover:bg-white/10"
-                      >
-                        Try Again
-                      </Button>
-                    </div>
-                  ) : summary ? (
-                    <div className="space-y-3">
-                      <p className="text-base leading-relaxed text-gray-900 dark:text-white font-normal">
-                        {summary}
-                      </p>
-                      <div className="flex items-center justify-between pt-4 border-t border-white/10 dark:border-white/10">
-                        <p className="text-xs text-gray-600 dark:text-gray-300">
-                          Generated by AI • May not be 100% accurate
-                        </p>
-                      </div>
-                    </div>
-                  ) : null}
-                </CardContent>
-              </Card>
-            </motion.div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
