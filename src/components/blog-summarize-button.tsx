@@ -187,7 +187,7 @@ export function BlogSummarizeButton({
         disabled={isLoading}
         variant="outline"
         size="sm"
-        className="gap-2 text-sm bg-transparent border-black/10 dark:border-white/10 text-gray-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/10"
+        className="gap-1.5 text-xs font-medium rounded-md border-border text-foreground hover:bg-accent hover:text-accent-foreground h-auto px-2 py-0.5"
       >
         {isLoading ? (
           <>
@@ -216,17 +216,22 @@ export function BlogSummarizeButton({
             transition={{ duration: 0.2 }}
             className="mt-4 w-full"
           >
-            <div className="w-full rounded-2xl border border-black/15 dark:border-white/10 bg-white/70 dark:bg-white/10 backdrop-blur-2xl p-4 shadow-sm">
-              <div className="flex items-center justify-between pb-3 border-b border-white/10 dark:border-white/10">
+            <div
+              className="
+                w-full rounded-2xl border border-border
+                bg-card text-card-foreground
+                shadow-md
+                backdrop-blur-2xl
+                p-4
+              "
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div className="flex items-center gap-2">
-                  <Bot className="w-5 h-5" />
-                  <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <Bot className="w-5 h-5 text-card-foreground" />
+                  <span className="text-lg font-semibold text-card-foreground">
                     AI Summary
                   </span>
-                  <Badge
-                    variant="secondary"
-                    className="text-xs bg-transparent text-gray-900 dark:text-white border border-black/15 dark:border-white/15"
-                  >
+                  <Badge variant="outline" className="text-xs">
                     ChatGPT
                   </Badge>
                 </div>
@@ -234,7 +239,7 @@ export function BlogSummarizeButton({
                   variant="ghost"
                   size="sm"
                   onClick={handleClose}
-                  className="h-8 w-8 p-0 hover:bg-white/10 dark:hover:bg-white/10 text-gray-700 dark:text-white"
+                  className="h-8 w-8 p-0"
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -243,7 +248,7 @@ export function BlogSummarizeButton({
               <div className="pt-4">
                 {showTurnstile && !turnstileToken ? (
                   <div className="flex flex-col items-center py-4 space-y-3">
-                    <p className="text-sm text-gray-800 dark:text-gray-100 text-center">
+                    <p className="text-sm text-card-foreground text-center font-normal">
                       Please complete the verification to generate summary
                     </p>
                     {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
@@ -259,18 +264,18 @@ export function BlogSummarizeButton({
                 ) : isLoading ? (
                   <div className="flex items-center justify-center py-8">
                     <div className="text-center space-y-3">
-                      <Loader2 className="w-8 h-8 animate-spin mx-auto" />
-                      <p className="text-sm text-gray-800 dark:text-gray-100">
+                      <Loader2 className="w-8 h-8 animate-spin mx-auto text-card-foreground" />
+                      <p className="text-sm text-card-foreground font-normal">
                         Generating summary...
                       </p>
                     </div>
                   </div>
                 ) : error ? (
-                  <div className="text-gray-900 dark:text-white text-sm">
-                    <p className="font-semibold mb-2">
+                  <div className="text-card-foreground text-sm font-normal">
+                    <p className="font-semibold mb-2 text-card-foreground">
                       Error generating summary:
                     </p>
-                    <p>{error}</p>
+                    <p className="text-card-foreground font-normal">{error}</p>
                     <Button
                       variant="outline"
                       size="sm"
@@ -282,18 +287,18 @@ export function BlogSummarizeButton({
                         setTurnstileToken(null);
                         resetTurnstile();
                       }}
-                      className="mt-3 border-black/10 dark:border-white/10 text-gray-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/10"
+                      className="mt-3"
                     >
                       Try Again
                     </Button>
                   </div>
                 ) : summary ? (
                   <div className="space-y-3">
-                    <p className="text-base leading-relaxed text-gray-900 dark:text-gray-100">
+                    <p className="text-base leading-relaxed text-card-foreground font-normal">
                       {summary}
                     </p>
-                    <div className="flex items-center justify-between pt-4 border-t border-white/10 dark:border-white/10">
-                      <p className="text-xs text-gray-700 dark:text-gray-300">
+                    <div className="flex items-center justify-between pt-4 border-t border-border">
+                      <p className="text-xs text-muted-foreground">
                         Generated by AI • May not be 100% accurate
                       </p>
                     </div>
