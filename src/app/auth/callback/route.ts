@@ -8,8 +8,20 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/blog";
+  let next = searchParams.get("next");
   const error = searchParams.get("error");
+
+  // If next is missing, empty, or invalid, default to /blog
+  // Never redirect to home page (/)
+  if (!next || next === "/" || !next.startsWith("/")) {
+    next = "/blog";
+  }
+
+  // Ensure we're redirecting to a valid path (blog post or blog listing)
+  // If next doesn't start with /blog, default to /blog
+  if (!next.startsWith("/blog")) {
+    next = "/blog";
+  }
 
   if (error) {
     return NextResponse.redirect(
@@ -21,12 +33,19 @@ export async function GET(request: NextRequest) {
     const { error: exchangeError } =
       await supabase.auth.exchangeCodeForSession(code);
     if (!exchangeError) {
-      // Redirect back to the original page or blog
-      return NextResponse.redirect(`${origin}${next}`);
+      // Always redirect to a valid path (never to /)
+      // The client-side will check sessionStorage as a fallback
+      const response = NextResponse.redirect(`${origin}${next}`);
+      // Set a cookie with the redirect path as additional backup
+      response.cookies.set("auth_redirect_path", next, {
+        maxAge: 60, // 60 seconds
+        httpOnly: false,
+        sameSite: "lax",
+      });
+      return response;
     }
   }
 
-  // If no code or error, redirect to the next page if available, otherwise blog
-  const redirectTo = next !== "/blog" ? next : "/blog";
-  return NextResponse.redirect(`${origin}${redirectTo}`);
+  // Fallback: always redirect to blog (never to /)
+  return NextResponse.redirect(`${origin}${next}`);
 }

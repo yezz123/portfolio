@@ -30,6 +30,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
+
+      // Check if we just completed authentication and need to redirect
+      // This handles the case where the server-side redirect didn't work
+      if (session?.user && typeof window !== "undefined") {
+        const storedPath = sessionStorage.getItem("auth_redirect_path");
+        if (storedPath && window.location.pathname !== storedPath) {
+          // Only redirect if we're on the home page or callback page
+          if (
+            window.location.pathname === "/" ||
+            window.location.pathname === "/auth/callback"
+          ) {
+            sessionStorage.removeItem("auth_redirect_path");
+            window.location.href = storedPath;
+            return;
+          }
+        }
+      }
     };
 
     getInitialSession();
@@ -40,6 +57,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = onAuthStateChange((user) => {
       setUser(user);
       setLoading(false);
+
+      // Handle redirect after successful authentication
+      if (user && typeof window !== "undefined") {
+        const storedPath = sessionStorage.getItem("auth_redirect_path");
+        if (storedPath && window.location.pathname !== storedPath) {
+          // Only redirect if we're on the home page or callback page
+          if (
+            window.location.pathname === "/" ||
+            window.location.pathname === "/auth/callback"
+          ) {
+            sessionStorage.removeItem("auth_redirect_path");
+            window.location.href = storedPath;
+            return;
+          }
+        }
+      }
     });
 
     // Also listen for storage changes (when auth happens in another tab)
