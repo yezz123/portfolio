@@ -1,16 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-// Ensure Prisma only runs on the server side
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
-
-// Only create Prisma client on server side
-export const prisma =
-  typeof window === "undefined"
-    ? (globalForPrisma.prisma ?? new PrismaClient())
-    : null;
-
-if (process.env.NODE_ENV !== "production" && typeof window === "undefined") {
-  globalForPrisma.prisma = prisma as PrismaClient;
-}
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+export const prisma = new PrismaClient({ adapter });

@@ -2,12 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client" // or `prisma-client-js`
+  output          = "../src/generated/prisma"
+  engineType      = "client" // enable Prisma ORM without Rust
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
 }
 
 // User model for authentication and preferences
@@ -31,7 +32,7 @@ model BlogPost {
   slug        String   @unique
   title       String
   excerpt     String
-  content     String   // MDX content
+  content     String // MDX content
   published   Boolean  @default(false)
   featured    Boolean  @default(false)
   readingTime Int      @default(5)
@@ -76,19 +77,18 @@ model Comment {
   content   String
   blogId    String
   userId    String
-  parentId  String?  // For replies
+  parentId  String? // For replies
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  blog   BlogPost @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parent Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  blog    BlogPost  @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies Comment[] @relation("CommentReplies")
 
   @@map("comments")
 }
-
 
 // Talks model
 model Talk {
@@ -130,7 +130,7 @@ model Project {
 
 // Work experience model
 model WorkExperience {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   company      String
   position     String
   startDate    DateTime
@@ -138,23 +138,23 @@ model WorkExperience {
   description  String
   technologies String[]
   logoUrl      String?
-  current      Boolean  @default(false)
-  order        Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  current      Boolean   @default(false)
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@map("work_experience")
 }
 
 // Uses items model
 model UsesItem {
-  id          String @id @default(cuid())
+  id          String   @id @default(cuid())
   category    String // 'desk', 'home', 'tools'
   name        String
   description String
   url         String?
   icon        String?
-  order       Int    @default(0)
+  order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -179,8 +179,8 @@ model GitHubStats {
   totalRepos     Int      @default(0)
   totalStars     Int      @default(0)
   totalForks     Int      @default(0)
-  commitActivity Json     // Store as JSON
-  languages      Json     // Store as JSON
+  commitActivity Json // Store as JSON
+  languages      Json // Store as JSON
   lastUpdated    DateTime @default(now())
 
   @@map("github_stats")
