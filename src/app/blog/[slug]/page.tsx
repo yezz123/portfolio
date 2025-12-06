@@ -95,7 +95,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       url: "https://yezz.me",
       sameAs: [
         "https://github.com/yezz123",
-        "https://twitter.com/THyasser1",
+        "https://twitter.com/0xyezzz",
         "https://linkedin.com/in/yezz123",
       ],
     },
