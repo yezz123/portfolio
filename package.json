@@ -38,7 +38,7 @@
   ],
   "scripts": {
     "dev": "NODE_OPTIONS='--no-deprecation --no-warnings' next dev --turbopack",
-    "build": "NODE_OPTIONS='--no-deprecation' next build --turbopack",
+    "build": "NODE_OPTIONS='--no-deprecation' pnpm run db:generate && next build --turbopack",
     "start": "NODE_OPTIONS='--no-deprecation' next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
