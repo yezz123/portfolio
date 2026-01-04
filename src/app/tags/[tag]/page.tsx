@@ -227,20 +227,8 @@ export default function TagPage() {
                           >
                             {item.title}
                           </Link>
-                        ) : item.type === "talk" ? (
-                          <Link
-                            href={`/talks/${item.slug}`}
-                            className="hover:text-primary transition-colors"
-                          >
-                            {item.title}
-                          </Link>
                         ) : (
-                          <Link
-                            href={`/projects/${item.slug}`}
-                            className="hover:text-primary transition-colors"
-                          >
-                            {item.title}
-                          </Link>
+                          <span>{item.title}</span>
                         )}
                       </CardTitle>
                       <CardDescription className="text-base leading-relaxed">

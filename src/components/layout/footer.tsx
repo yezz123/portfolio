@@ -2,8 +2,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, Heart, Gamepad2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Heart,
+  Gamepad2,
+  Wallet,
+  TrendingUp,
+} from "lucide-react";
 import { PersonalInfo } from "@/lib/data";
 import { loadConfig } from "@/lib/yaml-loader";
 import Image from "next/image";
@@ -21,9 +29,16 @@ interface FooterConfig {
   resources?: FooterLink[];
 }
 
+interface PortfolioData {
+  totalValueUsd: number;
+  lastUpdated: string;
+}
+
 export function Footer() {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
   const [footerConfig, setFooterConfig] = useState<FooterConfig | null>(null);
+  const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
+  const [portfolioLoading, setPortfolioLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
@@ -44,6 +59,57 @@ export function Footer() {
     };
     loadData();
   }, []);
+
+  useEffect(() => {
+    const loadPortfolio = async () => {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+        const response = await fetch("/api/crypto-portfolio", {
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.totalValueUsd) {
+            setPortfolio({
+              totalValueUsd: data.totalValueUsd,
+              lastUpdated: data.lastUpdated,
+            });
+          }
+        }
+      } catch (error) {
+        // Silently fail - portfolio widget is optional
+        if (error instanceof Error && error.name !== "AbortError") {
+          console.error("Error loading portfolio data:", error);
+        }
+      } finally {
+        setPortfolioLoading(false);
+      }
+    };
+
+    // Delay initial load slightly to prioritize main content
+    const initialTimeout = setTimeout(loadPortfolio, 1000);
+
+    // Refresh portfolio data every 5 minutes
+    const interval = setInterval(loadPortfolio, 5 * 60 * 1000);
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, []);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
 
   const socialLinks = personalInfo
     ? [
@@ -145,6 +211,62 @@ export function Footer() {
                 );
               })}
             </div>
+
+            {/* Crypto Portfolio Widget */}
+            <AnimatePresence>
+              {!portfolioLoading && portfolio && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="mt-6"
+                >
+                  <Link
+                    href="https://wallet.yezz.me"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-cyan-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10"
+                  >
+                    <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30">
+                      <Wallet className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                        Crypto Portfolio
+                        <TrendingUp className="w-3 h-3 text-emerald-500" />
+                      </span>
+                      <motion.span
+                        className="text-lg font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {formatCurrency(portfolio.totalValueUsd)}
+                      </motion.span>
+                    </div>
+                    <motion.div
+                      className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      initial={{ x: -5 }}
+                      animate={{ x: 0 }}
+                    >
+                      <svg
+                        className="w-4 h-4 text-emerald-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </svg>
+                    </motion.div>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Pages */}
