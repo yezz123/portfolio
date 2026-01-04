@@ -7,12 +7,12 @@
   featured: true
   pinned: true
 
-- id: "StackAI"
-  name: "StackAI"
-  description: "StackAI is a platform for building and deploying machine learning models with automated workflows and monitoring."
-  url: "https://stackai.com"
-  technologies: ["Python", "FastAPI", "Azure", "Docker", "Kubernetes"]
-  imageUrl: "/images/projects/stackai.jpg"
+- id: "Hyperbeat"
+  name: "Hyperbeat"
+  description: "Access the premier super app for all your money. Fiat-crypto conversion, high-yield accounts, credit card, and more."
+  url: "https://hyperbeat.org"
+  technologies: ["Python", "FastAPI", "Rust", "Typescript", "AWS"]
+  imageUrl: "/images/projects/hyperbeat.jpg"
   featured: true
   pinned: true
 
@@ -20,27 +20,29 @@
   name: "Pragma"
   description: "Pragma is the open and permissionless infrastructure for oracles, enabling anyone to deploy optimized oracles for any application."
   url: "https://pragma.build"
-  technologies: ["Python", "Rust", "Docker", "Kubernetes", "FastAPI", "GCP", "AWS"]
+  technologies:
+    ["Python", "Rust", "Docker", "Kubernetes", "FastAPI", "GCP", "AWS"]
   imageUrl: "/images/projects/pragma.jpg"
   featured: true
   pinned: true
+
+- id: "StackAI"
+  name: "StackAI"
+  description: "StackAI is a platform for building and deploying machine learning models with automated workflows and monitoring."
+  url: "https://stackai.com"
+  technologies: ["Python", "FastAPI", "Azure", "Docker", "Kubernetes"]
+  imageUrl: "/images/projects/stackai.jpg"
+  featured: true
+  pinned: false
 
 - id: "Authless"
   name: "Authless (Coming Soon)"
   description: "Authless is a modern, open-source authentication and authorization solution for modern web applications."
   url: "https://github.com/authless-space"
-  technologies: ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "Kubernetes"]
+  technologies:
+    ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "Kubernetes"]
   imageUrl: "/images/projects/authless.png"
   featured: true
-  pinned: false
-
-- id: "AIOpsight"
-  name: "AIOpsight"
-  description: "Observability layer for AI systems, designed to deliver deep insights without reinventing the wheel for every new model, method, or metric."
-  url: "https://aiopsight.com/"
-  technologies: ["Rust", "Python", "Docker", "Kubernetes", "Terraform", "AWS"]
-  imageUrl: "/images/projects/aiopsight.jpg"
-  featured: false
   pinned: false
 
 - id: "Dopp Finance"

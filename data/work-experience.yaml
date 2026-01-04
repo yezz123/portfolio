@@ -7,6 +7,15 @@
   logoUrl: "/images/companies/yezz-llc.png"
   url: "https://yezz.me"
 
+- company: "Hyperbeat"
+  position: "Senior Software Engineer"
+  startDate: "2025-10-28"
+  endDate: null
+  description: "I joined Hyperbeat as a Senior Software Engineer, focusing on building the next Liquid Bank in Hyperevm chain."
+  technologies: ["Python", "FastAPI", "Rust", "Typescript", "AWS"]
+  logoUrl: "/images/companies/hyperbeat.jpg"
+  url: "https://hyperbeat.org"
+
 - company: "Pragma Labs."
   position: "Founding Software Engineer"
   startDate: "2024-12-10"
