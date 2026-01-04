@@ -1,10 +1,10 @@
 ---
-title: 'Getting started with GraphQL in Python with FastAPI and Ariadne'
-date: '2021-10-05'
-tags: ['Python', 'GraphQL', 'FastAPI']
+title: "Getting started with GraphQL in Python with FastAPI and Ariadne"
+date: "2021-10-05"
+tags: ["Python", "GraphQL", "FastAPI"]
 featured: false
-excerpt: 'Generate a FullStack playground using FastAPI, GraphQL and Ariadne'
-image: '/images/blog/11/01.jpg'
+excerpt: "Generate a FullStack playground using FastAPI, GraphQL and Ariadne"
+image: "/images/blog/11/01.jpg"
 ---
 
 FastAPI is a high-performance framework for building web APIs with Python. Its simple and intuitive nature makes it easy to quickly develop robust web APIs using very little boilerplate code. In this article, we’ll introduce FastAPI and how to set up a GraphQL server with it using Graphene & Ariadne.
@@ -22,7 +22,6 @@ python --version
 **Note:** If you don’t have it installed, get it [here](https://www.python.org/downloads/).
 
 - To build this project we will need the following Python packages:
-
   - [FastAPI](https://fastapi.tiangolo.com/) - A fast, modern, and flexible framework for building web APIs with Python.
   - [Ariadne](https://ariadnegraphql.org/) - A Python library for implementing GraphQL servers using schema-first approach.
 
@@ -40,7 +39,6 @@ We install uvicorn with the “standard” option since that brings optional ext
 ASGI is an emerging standard for building asynchronous services in Python that support HTTP/2 and WebSocket. Web frameworks like Flask and Pyramid are examples of WSGI based frameworks and do not support ASGI. Django was for a long time a WSGI based framework but it has introduced ASGI support in version 3.1.
 
 - ASGI has two components:
-
   - Protocol Server: Handles low level details of sockets, translating them to connections and relaying them to the application
   - Application: A callable that is responsible for handling incoming requests. There are several ASGI frameworks that simplify building applications.
 
