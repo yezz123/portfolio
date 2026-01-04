@@ -72,7 +72,6 @@ home:
     description: "I don't use it much but it's still here"
     icon: "🎮"
 
-
 tools:
   - name: "VS Code"
     description: "Primary code editor with extensive extensions"

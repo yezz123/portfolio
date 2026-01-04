@@ -75,6 +75,7 @@ export async function GET(request: Request, { params }: RouteParams) {
           date: talk.date,
           description: talk.description,
           venue: talk.venue,
+          url: talk.videoUrl || talk.slidesUrl,
         });
       }
     });

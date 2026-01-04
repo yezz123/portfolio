@@ -1,10 +1,10 @@
 ---
-title: 'Integrate Pydantic with Django and Django REST Framework'
-date: '2021-12-14'
-tags: ['Pydantic', 'Python', 'Django', 'Django REST Framework']
+title: "Integrate Pydantic with Django and Django REST Framework"
+date: "2021-12-14"
+tags: ["Pydantic", "Python", "Django", "Django REST Framework"]
 featured: true
-excerpt: 'Pydantic is a Pythonic data validation library that makes it easy to create data models and validate data.'
-image: '/images/blog/12/01.png'
+excerpt: "Pydantic is a Pythonic data validation library that makes it easy to create data models and validate data."
+image: "/images/blog/12/01.png"
 ---
 
 Python has always been a dynamically typed language, which means you don’t have to specify data types for variables and function return values. [PEP 484](https://www.python.org/dev/peps/pep-0484/) introduced type hints — a way to make Python feel statically typed.
@@ -110,16 +110,16 @@ print(openapi_params(Model))
 we will see that the response in `json` format, and `id` will be the name of the parameter, this is what we got in a basic model:
 
 ```js
-;[
+[
   {
-    name: 'id',
-    in: 'query',
-    description: '',
+    name: "id",
+    in: "query",
+    description: "",
     required: True,
     deprecated: False,
     allowEmptyValue: False,
   },
-]
+];
 ```
 
 Let's try to extand using `pyngo.ParameterDict.required` is set according to the type of the variable:
@@ -139,24 +139,24 @@ print(openapi_params(Model))
 same result but we will see the changes in the `required` field:
 
 ```js
-;[
+[
   {
     allowEmptyValue: False,
     deprecated: False,
-    description: '',
-    in: 'query',
-    name: 'required_param',
+    description: "",
+    in: "query",
+    name: "required_param",
     required: True,
   },
   {
     allowEmptyValue: False,
     deprecated: False,
-    description: '',
-    in: 'query',
-    name: 'optional_param',
+    description: "",
+    in: "query",
+    name: "optional_param",
     required: False,
   },
-]
+];
 ```
 
 We can also setup the other fields of the `ParameterDict` class:

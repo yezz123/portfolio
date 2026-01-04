@@ -147,11 +147,11 @@
   }
   /* Optimize font loading */
   @font-face {
-    font-family: '__GeistSans_7b9baf';
+    font-family: "__GeistSans_7b9baf";
     font-display: swap;
   }
   @font-face {
-    font-family: '__GeistMono_7b9baf';
+    font-family: "__GeistMono_7b9baf";
     font-display: swap;
   }
 }
@@ -161,39 +161,40 @@
   .blog-content {
     @apply max-w-none;
   }
-  
+
   .blog-content h1 {
     @apply text-3xl font-bold mb-6 mt-8 first:mt-0;
   }
-  
+
   .blog-content h2 {
     @apply text-2xl font-semibold mb-4 mt-8;
   }
-  
+
   .blog-content h3 {
     @apply text-xl font-semibold mb-3 mt-6;
   }
-  
+
   .blog-content p {
     @apply mb-4 leading-relaxed;
   }
-  
-  .blog-content ul, .blog-content ol {
+
+  .blog-content ul,
+  .blog-content ol {
     @apply mb-4 pl-6;
   }
-  
+
   .blog-content li {
     @apply mb-2;
   }
-  
+
   .blog-content code {
     @apply bg-muted px-2 py-1 rounded text-sm font-mono;
   }
-  
+
   .blog-content pre {
     @apply bg-muted p-4 rounded-lg overflow-x-auto mb-4 relative;
   }
-  
+
   .blog-content pre code {
     @apply bg-transparent p-0;
   }
@@ -224,259 +225,263 @@
     @apply bg-transparent p-0;
   }
 
-      /* Prism.js theme - Custom GitHub-inspired */
-      .code-block-wrapper pre {
-        @apply m-0 p-4 overflow-x-auto text-sm;
-        background: hsl(var(--muted)) !important;
-      }
+  /* Prism.js theme - Custom GitHub-inspired */
+  .code-block-wrapper pre {
+    @apply m-0 p-4 overflow-x-auto text-sm;
+    background: hsl(var(--muted)) !important;
+  }
 
-      .code-block-wrapper code {
-        @apply bg-transparent p-0;
-        font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
-      }
+  .code-block-wrapper code {
+    @apply bg-transparent p-0;
+    font-family:
+      "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro",
+      monospace;
+  }
 
-      /* Prism.js syntax highlighting */
-      .token.comment,
-      .token.prolog,
-      .token.doctype,
-      .token.cdata {
-        color: #6a737d;
-        font-style: italic;
-      }
+  /* Prism.js syntax highlighting */
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: #6a737d;
+    font-style: italic;
+  }
 
-      .token.punctuation {
-        color: #586069;
-      }
+  .token.punctuation {
+    color: #586069;
+  }
 
-      .token.property,
-      .token.tag,
-      .token.boolean,
-      .token.number,
-      .token.constant,
-      .token.symbol,
-      .token.deleted {
-        color: #005cc5;
-      }
+  .token.property,
+  .token.tag,
+  .token.boolean,
+  .token.number,
+  .token.constant,
+  .token.symbol,
+  .token.deleted {
+    color: #005cc5;
+  }
 
-      .token.selector,
-      .token.attr-name,
-      .token.string,
-      .token.char,
-      .token.builtin,
-      .token.inserted {
-        color: #032f62;
-      }
+  .token.selector,
+  .token.attr-name,
+  .token.string,
+  .token.char,
+  .token.builtin,
+  .token.inserted {
+    color: #032f62;
+  }
 
-      .token.operator,
-      .token.entity,
-      .token.url,
-      .language-css .token.string,
-      .style .token.string {
-        color: #d73a49;
-      }
+  .token.operator,
+  .token.entity,
+  .token.url,
+  .language-css .token.string,
+  .style .token.string {
+    color: #d73a49;
+  }
 
-      .token.atrule,
-      .token.attr-value,
-      .token.keyword {
-        color: #d73a49;
-      }
+  .token.atrule,
+  .token.attr-value,
+  .token.keyword {
+    color: #d73a49;
+  }
 
-      .token.function,
-      .token.class-name {
-        color: #6f42c1;
-      }
+  .token.function,
+  .token.class-name {
+    color: #6f42c1;
+  }
 
-      .token.regex,
-      .token.important,
-      .token.variable {
-        color: #e36209;
-      }
+  .token.regex,
+  .token.important,
+  .token.variable {
+    color: #e36209;
+  }
 
-      /* Dark mode adjustments for Prism.js */
-      .dark .token.comment,
-      .dark .token.prolog,
-      .dark .token.doctype,
-      .dark .token.cdata {
-        color: #8b949e;
-      }
+  /* Dark mode adjustments for Prism.js */
+  .dark .token.comment,
+  .dark .token.prolog,
+  .dark .token.doctype,
+  .dark .token.cdata {
+    color: #8b949e;
+  }
 
-      .dark .token.punctuation {
-        color: #c9d1d9;
-      }
+  .dark .token.punctuation {
+    color: #c9d1d9;
+  }
 
-      .dark .token.property,
-      .dark .token.tag,
-      .dark .token.boolean,
-      .dark .token.number,
-      .dark .token.constant,
-      .dark .token.symbol,
-      .dark .token.deleted {
-        color: #79c0ff;
-      }
+  .dark .token.property,
+  .dark .token.tag,
+  .dark .token.boolean,
+  .dark .token.number,
+  .dark .token.constant,
+  .dark .token.symbol,
+  .dark .token.deleted {
+    color: #79c0ff;
+  }
 
-      .dark .token.selector,
-      .dark .token.attr-name,
-      .dark .token.string,
-      .dark .token.char,
-      .dark .token.builtin,
-      .dark .token.inserted {
-        color: #a5d6ff;
-      }
+  .dark .token.selector,
+  .dark .token.attr-name,
+  .dark .token.string,
+  .dark .token.char,
+  .dark .token.builtin,
+  .dark .token.inserted {
+    color: #a5d6ff;
+  }
 
-      .dark .token.operator,
-      .dark .token.entity,
-      .dark .token.url,
-      .dark .language-css .token.string,
-      .dark .style .token.string {
-        color: #ff7b72;
-      }
+  .dark .token.operator,
+  .dark .token.entity,
+  .dark .token.url,
+  .dark .language-css .token.string,
+  .dark .style .token.string {
+    color: #ff7b72;
+  }
 
-      .dark .token.atrule,
-      .dark .token.attr-value,
-      .dark .token.keyword {
-        color: #ff7b72;
-      }
+  .dark .token.atrule,
+  .dark .token.attr-value,
+  .dark .token.keyword {
+    color: #ff7b72;
+  }
 
-      .dark .token.function,
-      .dark .token.class-name {
-        color: #d2a8ff;
-      }
+  .dark .token.function,
+  .dark .token.class-name {
+    color: #d2a8ff;
+  }
 
-      .dark .token.regex,
-      .dark .token.important,
-      .dark .token.variable {
-        color: #ffa657;
-      }
-  
+  .dark .token.regex,
+  .dark .token.important,
+  .dark .token.variable {
+    color: #ffa657;
+  }
+
   .blog-content blockquote {
     @apply border-l-4 border-primary pl-4 italic my-4;
   }
-  
+
   .blog-content a {
     @apply text-primary hover:underline;
   }
-  
-/* Blog images styling */
-.blog-image {
-  @apply max-w-full h-auto rounded-lg shadow-md my-6 mx-auto block;
-}
 
-.blog-content img {
-  @apply max-w-full h-auto rounded-lg shadow-md my-6 mx-auto block;
-}
+  /* Blog images styling */
+  .blog-image {
+    @apply max-w-full h-auto rounded-lg shadow-md my-6 mx-auto block;
+  }
 
-/* Blog links styling */
-.blog-link {
-  @apply text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 transition-all duration-200;
-}
+  .blog-content img {
+    @apply max-w-full h-auto rounded-lg shadow-md my-6 mx-auto block;
+  }
 
-.github-link {
-  @apply text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
-}
+  /* Blog links styling */
+  .blog-link {
+    @apply text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 transition-all duration-200;
+  }
 
-/* Code block styling */
-.code-block-wrapper {
-  @apply my-6 rounded-lg border border-border overflow-hidden;
-  background: hsl(var(--muted));
-}
+  .github-link {
+    @apply text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
+  }
 
-.code-block-header {
-  @apply flex items-center justify-between px-4 py-2 text-sm border-b border-border;
-  background: hsl(var(--muted) / 0.5);
-}
+  /* Code block styling */
+  .code-block-wrapper {
+    @apply my-6 rounded-lg border border-border overflow-hidden;
+    background: hsl(var(--muted));
+  }
 
-.code-block-lang {
-  @apply font-medium text-muted-foreground;
-}
+  .code-block-header {
+    @apply flex items-center justify-between px-4 py-2 text-sm border-b border-border;
+    background: hsl(var(--muted) / 0.5);
+  }
 
-.code-block-copy {
-  @apply px-2 py-1 text-xs bg-background hover:bg-accent text-foreground rounded border border-border transition-colors duration-200;
-}
+  .code-block-lang {
+    @apply font-medium text-muted-foreground;
+  }
 
-.code-block-copy:hover {
-  @apply bg-accent text-accent-foreground;
-}
+  .code-block-copy {
+    @apply px-2 py-1 text-xs bg-background hover:bg-accent text-foreground rounded border border-border transition-colors duration-200;
+  }
 
-.code-block-wrapper pre {
-  @apply m-0 p-4 overflow-x-auto;
-  background: hsl(var(--muted) / 0.3);
-}
+  .code-block-copy:hover {
+    @apply bg-accent text-accent-foreground;
+  }
 
-.code-block-wrapper code {
-  @apply text-sm leading-relaxed;
-  font-family: 'Fira Code', 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
-}
+  .code-block-wrapper pre {
+    @apply m-0 p-4 overflow-x-auto;
+    background: hsl(var(--muted) / 0.3);
+  }
 
-/* Prism.js theme overrides for better dark/light mode support */
-.code-block-wrapper .token.comment,
-.code-block-wrapper .token.prolog,
-.code-block-wrapper .token.doctype,
-.code-block-wrapper .token.cdata {
-  @apply text-muted-foreground;
-}
+  .code-block-wrapper code {
+    @apply text-sm leading-relaxed;
+    font-family:
+      "Fira Code", "JetBrains Mono", "SF Mono", "Monaco", "Inconsolata",
+      "Roboto Mono", "Source Code Pro", monospace;
+  }
 
-.code-block-wrapper .token.punctuation {
-  @apply text-foreground;
-}
+  /* Prism.js theme overrides for better dark/light mode support */
+  .code-block-wrapper .token.comment,
+  .code-block-wrapper .token.prolog,
+  .code-block-wrapper .token.doctype,
+  .code-block-wrapper .token.cdata {
+    @apply text-muted-foreground;
+  }
 
-.code-block-wrapper .token.property,
-.code-block-wrapper .token.tag,
-.code-block-wrapper .token.boolean,
-.code-block-wrapper .token.number,
-.code-block-wrapper .token.constant,
-.code-block-wrapper .token.symbol,
-.code-block-wrapper .token.deleted {
-  @apply text-red-500 dark:text-red-400;
-}
+  .code-block-wrapper .token.punctuation {
+    @apply text-foreground;
+  }
 
-.code-block-wrapper .token.selector,
-.code-block-wrapper .token.attr-name,
-.code-block-wrapper .token.string,
-.code-block-wrapper .token.char,
-.code-block-wrapper .token.builtin,
-.code-block-wrapper .token.inserted {
-  @apply text-green-600 dark:text-green-400;
-}
+  .code-block-wrapper .token.property,
+  .code-block-wrapper .token.tag,
+  .code-block-wrapper .token.boolean,
+  .code-block-wrapper .token.number,
+  .code-block-wrapper .token.constant,
+  .code-block-wrapper .token.symbol,
+  .code-block-wrapper .token.deleted {
+    @apply text-red-500 dark:text-red-400;
+  }
 
-.code-block-wrapper .token.operator,
-.code-block-wrapper .token.entity,
-.code-block-wrapper .token.url,
-.code-block-wrapper .language-css .token.string,
-.code-block-wrapper .style .token.string {
-  @apply text-foreground;
-}
+  .code-block-wrapper .token.selector,
+  .code-block-wrapper .token.attr-name,
+  .code-block-wrapper .token.string,
+  .code-block-wrapper .token.char,
+  .code-block-wrapper .token.builtin,
+  .code-block-wrapper .token.inserted {
+    @apply text-green-600 dark:text-green-400;
+  }
 
-.code-block-wrapper .token.atrule,
-.code-block-wrapper .token.attr-value,
-.code-block-wrapper .token.keyword {
-  @apply text-blue-600 dark:text-blue-400;
-}
+  .code-block-wrapper .token.operator,
+  .code-block-wrapper .token.entity,
+  .code-block-wrapper .token.url,
+  .code-block-wrapper .language-css .token.string,
+  .code-block-wrapper .style .token.string {
+    @apply text-foreground;
+  }
 
-.code-block-wrapper .token.function,
-.code-block-wrapper .token.class-name {
-  @apply text-yellow-600 dark:text-yellow-400;
-}
+  .code-block-wrapper .token.atrule,
+  .code-block-wrapper .token.attr-value,
+  .code-block-wrapper .token.keyword {
+    @apply text-blue-600 dark:text-blue-400;
+  }
 
-.code-block-wrapper .token.regex,
-.code-block-wrapper .token.important,
-.code-block-wrapper .token.variable {
-  @apply text-orange-600 dark:text-orange-400;
-}
-  
+  .code-block-wrapper .token.function,
+  .code-block-wrapper .token.class-name {
+    @apply text-yellow-600 dark:text-yellow-400;
+  }
+
+  .code-block-wrapper .token.regex,
+  .code-block-wrapper .token.important,
+  .code-block-wrapper .token.variable {
+    @apply text-orange-600 dark:text-orange-400;
+  }
+
   /* Custom animations */
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
-  
+
   .animate-pulse-slow {
     animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
-  
+
   /* Gradient text */
   .text-gradient {
     @apply bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent;
   }
-  
+
   /* Line clamp utilities */
   .line-clamp-2 {
     display: -webkit-box;
@@ -484,7 +489,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -492,24 +497,28 @@
     overflow: hidden;
   }
 
-/* Keyboard shortcut styling */
-kbd {
-  @apply inline-flex items-center px-1.5 py-0.5 text-xs font-mono bg-muted border border-border rounded shadow-sm;
-}
+  /* Keyboard shortcut styling */
+  kbd {
+    @apply inline-flex items-center px-1.5 py-0.5 text-xs font-mono bg-muted border border-border rounded shadow-sm;
+  }
 
-/* Keyboard shortcuts modal styling */
-.keyboard-shortcuts-modal .shortcut-key {
-  @apply inline-flex items-center justify-center min-w-[24px] h-6 px-2 text-xs font-mono bg-muted border border-border rounded;
-}
+  /* Keyboard shortcuts modal styling */
+  .keyboard-shortcuts-modal .shortcut-key {
+    @apply inline-flex items-center justify-center min-w-[24px] h-6 px-2 text-xs font-mono bg-muted border border-border rounded;
+  }
 
-/* Smooth theme transitions */
-* {
-  transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease;
-}
+  /* Smooth theme transitions */
+  * {
+    transition:
+      background-color 0.6s ease,
+      color 0.6s ease,
+      border-color 0.6s ease;
+  }
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {

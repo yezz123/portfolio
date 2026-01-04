@@ -7,7 +7,7 @@ personal:
     As a Software Engineer, my journey has been marked by a relentless pursuit of knowledge, largely self-driven and fueled by a genuine passion for emerging technologies, particularly in the realms of Backend and DevOps.
 
     Beyond my technical expertise, I am deeply enthusiastic about groundbreaking concepts and thrive on unconventional modes of thinking, a fervor that often surpasses my dedication to technology. My commitment to staying on the cutting edge of the industry is not merely a professional obligation but a personal drive that fuels my continuous exploration of innovative ideas and solutions.
-  avatar: "/images/avatar.jpeg"
+  avatar: "/icon.svg"
   location: "Morocco"
   email: "hello@yezz.me"
   github: "yezz123"
@@ -141,7 +141,7 @@ github:
 # ChatGPT Configuration
 chatgpt:
   enabled: true
-  apiKey: ""  # Set your OpenAI API key here or in environment variables
+  apiKey: "" # Set your OpenAI API key here or in environment variables
   model: "gpt-3.5-turbo"
   maxTokens: 150
   temperature: 0.7

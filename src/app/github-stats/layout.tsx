@@ -7,22 +7,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const baseUrl =
     site?.url || process.env.NEXT_PUBLIC_BASE_URL || "https://yezz.me";
-  const pageUrl = `${baseUrl}/uses`;
-  const description = `See what tools and technologies ${personal.name} uses as a ${personal.title}. Desk setup, home office, and development tools.`;
-  const ogImageUrl = `${baseUrl}/images/uses/office.png`;
+  const pageUrl = `${baseUrl}/github-stats`;
+  const description = `GitHub statistics and contributions by ${personal.name}, a ${personal.title}. View repositories, stars, forks, and programming languages.`;
+  const ogImageUrl = `${baseUrl}/api/og?title=${encodeURIComponent("GitHub Statistics")}&author=${encodeURIComponent(personal.name)}&date=${encodeURIComponent("Open Source Contributions")}`;
 
   return {
-    title: `Uses - ${personal.name}`,
+    title: `GitHub Stats - ${personal.name}`,
     description,
     keywords: [
       personal.name,
-      "uses",
-      "setup",
-      "tools",
-      "desk",
-      "office",
-      "equipment",
-      "software",
+      "github",
+      "statistics",
+      "open source",
+      "repositories",
+      "contributions",
+      "programming",
       ...(site?.keywords || []),
     ].join(", "),
     authors: [{ name: personal.name, url: personal.website }],
@@ -40,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     openGraph: {
-      title: `Uses - ${personal.name}`,
+      title: `GitHub Stats - ${personal.name}`,
       description,
       type: "website",
       url: pageUrl,
@@ -51,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `${personal.name} Setup`,
+          alt: `${personal.name} GitHub Statistics`,
           type: "image/png",
         },
       ],
@@ -60,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       site: `@${personal.twitter}`,
       creator: `@${personal.twitter}`,
-      title: `Uses - ${personal.name}`,
+      title: `GitHub Stats - ${personal.name}`,
       description,
       images: [ogImageUrl],
     },
@@ -70,7 +69,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function UsesLayout({
+export default function GitHubStatsLayout({
   children,
 }: {
   children: React.ReactNode;

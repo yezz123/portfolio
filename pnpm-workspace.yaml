@@ -2,9 +2,9 @@ packages:
   - "."
 
 onlyBuiltDependencies:
-  - '@prisma/client'
-  - '@prisma/engines'
-  - '@tailwindcss/oxide'
+  - "@prisma/client"
+  - "@prisma/engines"
+  - "@tailwindcss/oxide"
   - cwebp-bin
   - esbuild
   - mozjpeg
