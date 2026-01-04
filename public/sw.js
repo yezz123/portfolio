@@ -13,7 +13,7 @@ const urlsToCache = [
   "/icon.svg",
   "/manifest.json",
   "/icons/wave.png",
-  "/images/avatar.jpeg",
+  "/icon.svg",
 ];
 
 // Install event - cache static assets
