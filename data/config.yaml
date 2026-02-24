@@ -11,7 +11,7 @@ personal:
   location: "Morocco"
   email: "hello@yezz.me"
   github: "yezz123"
-  twitter: "0xyezzz"
+  twitter: "yezz123"
   linkedin: "yezz123"
   steam: "yezz123"
   website: "https://yezz.me"
@@ -42,8 +42,8 @@ social:
     url: "https://github.com/yezz123"
     username: "yezz123"
   twitter:
-    url: "https://x.com/0xyezzz"
-    username: "0xyezzz"
+    url: "https://x.com/yezz123"
+    username: "yezz123"
   linkedin:
     url: "https://linkedin.com/in/yezz123"
     username: "yezz123"
@@ -90,7 +90,7 @@ seo:
     siteName: "Yasser Tahiri Portfolio"
   twitter:
     card: "summary_large_image"
-    creator: "@0xyezzz"
+    creator: "@yezz123"
 
 # Features Configuration
 features:
