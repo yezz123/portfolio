@@ -1,20 +1,30 @@
 "use client";
 
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import type { PersonalInfo } from "@/lib/data";
 
 export interface KeyboardShortcut {
   key: string;
   description: string;
   action: () => void;
   category: "navigation" | "theme" | "search" | "utility";
-  modifier?: "ctrl" | "cmd" | "alt" | "shift";
+  modifier?: "ctrl" | "cmd" | "alt";
+  shift?: boolean;
 }
 
 export function useKeyboardShortcuts() {
   const router = useRouter();
   const { setTheme, theme } = useTheme();
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
+
+  useEffect(() => {
+    fetch("/api/personal-info")
+      .then((res) => res.json())
+      .then(setPersonalInfo)
+      .catch(() => {});
+  }, []);
 
   const shortcuts: KeyboardShortcut[] = useMemo(
     () => [
@@ -84,11 +94,12 @@ export function useKeyboardShortcuts() {
         modifier: "cmd",
       },
       {
-        key: "shift+d",
+        key: "d",
         description: "Dark Mode",
         action: () => setTheme("dark"),
         category: "theme",
         modifier: "cmd",
+        shift: true,
       },
       // Utility shortcuts
       {
@@ -112,19 +123,15 @@ export function useKeyboardShortcuts() {
       {
         key: "g",
         description: "Go to GitHub",
-        action: () => window.open("https://github.com/yourusername", "_blank"),
-        category: "utility",
-        modifier: "cmd",
-      },
-      {
-        key: "shift+g",
-        description: "Go to GitHub Profile",
-        action: () => window.open("https://github.com/yourusername", "_blank"),
+        action: () => {
+          if (personalInfo?.github)
+            window.open(`https://github.com/${personalInfo.github}`, "_blank");
+        },
         category: "utility",
         modifier: "cmd",
       },
     ],
-    [router, setTheme, theme],
+    [router, setTheme, theme, personalInfo],
   );
 
   const handleKeyDown = useCallback(
@@ -141,25 +148,17 @@ export function useKeyboardShortcuts() {
 
       const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
       const cmdKey = isMac ? event.metaKey : event.ctrlKey;
-      const altKey = event.altKey;
-      const shiftKey = event.shiftKey;
+      const pressedKey = event.key.toLowerCase();
 
-      // Build the key combination
-      let keyCombo = event.key.toLowerCase();
-      if (cmdKey) keyCombo = `cmd+${keyCombo}`;
-      if (altKey) keyCombo = `alt+${keyCombo}`;
-      if (shiftKey) keyCombo = `shift+${keyCombo}`;
-
-      // Find matching shortcut
-      const shortcut = shortcuts.find((shortcut) => {
-        let shortcutKey = shortcut.key.toLowerCase();
-        if (shortcut.modifier === "cmd") {
-          shortcutKey = `cmd+${shortcutKey}`;
-          if (shortcut.key.includes("shift")) {
-            shortcutKey = shortcutKey.replace("shift+", "cmd+shift+");
-          }
-        }
-        return shortcutKey === keyCombo;
+      const shortcut = shortcuts.find((s) => {
+        if (s.key.toLowerCase() !== pressedKey) return false;
+        if (s.modifier === "cmd" && !cmdKey) return false;
+        if (s.modifier === "alt" && !event.altKey) return false;
+        if (s.modifier === "ctrl" && !event.ctrlKey) return false;
+        if (!s.modifier && (cmdKey || event.altKey || event.ctrlKey))
+          return false;
+        if (!!s.shift !== event.shiftKey) return false;
+        return true;
       });
 
       if (shortcut) {
