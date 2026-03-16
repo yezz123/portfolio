@@ -64,11 +64,10 @@ export function KeyboardShortcutsModal({
     if (shortcut.modifier === "alt") {
       keys.push(isMac ? "⌥" : "Alt");
     }
-    if (shortcut.modifier === "shift") {
+    if (shortcut.shift) {
       keys.push("⇧");
     }
 
-    // Handle special keys
     const key = shortcut.key.toLowerCase();
     if (key === "escape") {
       keys.push("Esc");
