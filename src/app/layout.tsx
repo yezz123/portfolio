@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
@@ -12,16 +11,6 @@ import { loadConfig } from "@/lib/yaml-loader";
 import { GoogleAnalytics } from "@/components/analytics";
 import { Analytics } from "@vercel/analytics/next";
 import { AuthProvider } from "@/contexts/auth-context";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await loadConfig();
@@ -114,12 +103,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
         <link rel="dns-prefetch" href="//github.com" />
         <link rel="dns-prefetch" href="//avatars.githubusercontent.com" />
         <link
@@ -149,21 +132,12 @@ export default function RootLayout({
               nav.fixed {
                 contain: layout style;
               }
-              /* Font display optimization */
-              @font-face {
-                font-family: '__GeistSans_7b9baf';
-                font-display: swap;
-              }
-              @font-face {
-                font-family: '__GeistMono_7b9baf';
-                font-display: swap;
-              }
             `,
           }}
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
+        className="antialiased min-h-screen bg-background text-foreground"
         suppressHydrationWarning={true}
       >
         <ThemeProvider

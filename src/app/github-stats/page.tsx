@@ -11,7 +11,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { GitHubChart } from "@/components/ui/github-chart";
 // Removed direct imports - using API calls instead
-import { Github, Star, GitFork, Code, TrendingUp } from "lucide-react";
+import { Star, GitFork, Code, TrendingUp } from "lucide-react";
+import { GitHubIcon } from "@/components/ui/svg-icons";
 import { useEffect, useState } from "react";
 
 export default function GitHubStatsPage() {
@@ -84,7 +85,7 @@ export default function GitHubStatsPage() {
             transition={{ duration: 0.8 }}
             className="flex items-center justify-center space-x-3 mb-4"
           >
-            <Github className="w-8 h-8" />
+            <GitHubIcon className="w-8 h-8" />
             <h1 className="text-4xl md:text-5xl font-bold">
               GitHub Statistics
             </h1>
@@ -256,7 +257,7 @@ export default function GitHubStatsPage() {
                         rel="noopener noreferrer"
                         className="text-primary hover:underline"
                       >
-                        <Github className="w-4 h-4" />
+                        <GitHubIcon className="w-4 h-4" />
                       </a>
                     </div>
                   </div>
@@ -285,7 +286,7 @@ export default function GitHubStatsPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-2 text-primary hover:underline"
               >
-                <Github className="w-4 h-4" />
+                <GitHubIcon className="w-4 h-4" />
                 <span>Visit GitHub Profile</span>
               </a>
             </CardContent>

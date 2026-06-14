@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { ExternalLink, Github, Star, GitFork, Calendar } from "lucide-react";
+import { ExternalLink, Star, GitFork, Calendar } from "lucide-react";
+import { GitHubIcon } from "@/components/ui/svg-icons";
 import {
   Card,
   CardContent,
@@ -156,7 +157,7 @@ export default function ProjectsPage() {
                             rel="noopener noreferrer"
                             className="flex items-center justify-center"
                           >
-                            <Github className="w-4 h-4" />
+                            <GitHubIcon className="w-4 h-4" />
                           </a>
                         </Button>
                       )}

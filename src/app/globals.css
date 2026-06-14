@@ -66,6 +66,12 @@
 }
 
 :root {
+  --font-geist-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-geist-mono:
+    "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro",
+    ui-monospace, monospace;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -144,15 +150,6 @@
   /* Prevent layout shift */
   img {
     height: auto;
-  }
-  /* Optimize font loading */
-  @font-face {
-    font-family: "__GeistSans_7b9baf";
-    font-display: swap;
-  }
-  @font-face {
-    font-family: "__GeistMono_7b9baf";
-    font-display: swap;
   }
 }
 

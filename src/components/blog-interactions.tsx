@@ -2,15 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ThumbsDown,
-  ThumbsUp,
-  Facebook,
-  Twitter,
-  Link,
-  Globe,
-} from "lucide-react";
+import { ThumbsDown, ThumbsUp, Link, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FacebookIcon } from "@/components/ui/svg-icons";
+import { XIcon } from "@/components/ui/x-icon";
 import { toast } from "sonner";
 
 interface BlogInteractionsProps {
@@ -135,7 +130,7 @@ export function BlogInteractions({
             onClick={() => handleShare("facebook")}
             className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 dark:hover:bg-blue-950 dark:hover:border-blue-800 dark:hover:text-blue-300"
           >
-            <Facebook className="w-4 h-4" />
+            <FacebookIcon className="w-4 h-4" />
           </Button>
 
           <Button
@@ -144,7 +139,7 @@ export function BlogInteractions({
             onClick={() => handleShare("twitter")}
             className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 dark:hover:bg-blue-950 dark:hover:border-blue-800 dark:hover:text-blue-300"
           >
-            <Twitter className="w-4 h-4" />
+            <XIcon className="w-4 h-4" />
           </Button>
 
           <Button

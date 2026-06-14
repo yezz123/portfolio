@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Github, Linkedin, Mail, Keyboard } from "lucide-react";
+import { Menu, X, Mail, Keyboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/svg-icons";
 import { XIcon } from "@/components/ui/x-icon";
 import { PersonalInfo } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -73,7 +74,7 @@ export function Navigation() {
         {
           name: "GitHub",
           href: `https://github.com/${personalInfo.github}`,
-          icon: Github,
+          icon: GitHubIcon,
         },
         {
           name: "X (Twitter)",
@@ -83,7 +84,7 @@ export function Navigation() {
         {
           name: "LinkedIn",
           href: `https://linkedin.com/in/${personalInfo.linkedin}`,
-          icon: Linkedin,
+          icon: LinkedInIcon,
         },
         { name: "Email", href: `mailto:${personalInfo.email}`, icon: Mail },
       ]

@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, Github, Mail, Linkedin } from "lucide-react";
+import { ChevronDown, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/svg-icons";
 import { XIcon } from "@/components/ui/x-icon";
 import { PersonalInfo } from "@/lib/data";
 import Image from "next/image";
@@ -41,13 +42,13 @@ export function HeroSection() {
     {
       name: "GitHub",
       href: `https://github.com/${personalInfo.github}`,
-      icon: Github,
+      icon: GitHubIcon,
     },
     { name: "Email", href: `mailto:${personalInfo.email}`, icon: Mail },
     {
       name: "LinkedIn",
       href: `https://linkedin.com/in/${personalInfo.linkedin}`,
-      icon: Linkedin,
+      icon: LinkedInIcon,
     },
     {
       name: "X (Twitter)",

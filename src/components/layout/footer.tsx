@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, Heart, Gamepad2 } from "lucide-react";
+import { Mail, Heart, Gamepad2 } from "lucide-react";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/svg-icons";
 import { PersonalInfo } from "@/lib/data";
 import { loadConfig } from "@/lib/yaml-loader";
 import Image from "next/image";
@@ -50,7 +51,7 @@ export function Footer() {
         {
           name: "GitHub",
           href: `https://github.com/${personalInfo.github}`,
-          icon: Github,
+          icon: GitHubIcon,
         },
         {
           name: "X (Twitter)",
@@ -60,7 +61,7 @@ export function Footer() {
         {
           name: "LinkedIn",
           href: `https://linkedin.com/in/${personalInfo.linkedin}`,
-          icon: Linkedin,
+          icon: LinkedInIcon,
         },
         ...(personalInfo.steam
           ? [

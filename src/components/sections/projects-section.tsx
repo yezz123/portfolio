@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { GitHubIcon } from "@/components/ui/svg-icons";
 import {
   Card,
   CardContent,
@@ -200,7 +201,7 @@ export function ProjectsSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <Github className="w-4 h-4" />
+                        <GitHubIcon className="w-4 h-4" />
                       </a>
                     </Button>
                   )}

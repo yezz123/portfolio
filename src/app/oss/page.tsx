@@ -2,14 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ExternalLink,
-  Github,
-  Star,
-  GitFork,
-  Calendar,
-  Code,
-} from "lucide-react";
+import { ExternalLink, Star, GitFork, Calendar, Code } from "lucide-react";
+import { GitHubIcon } from "@/components/ui/svg-icons";
 import {
   Card,
   CardContent,
@@ -134,7 +128,7 @@ export default function OSSPage() {
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16"
         >
           <Card className="text-center p-6">
-            <Github className="w-10 h-10 text-primary mx-auto mb-4" />
+            <GitHubIcon className="w-10 h-10 text-primary mx-auto mb-4" />
             <CardTitle className="text-4xl font-bold">
               {stats?.totalRepos || 0}
             </CardTitle>
@@ -266,7 +260,7 @@ export default function OSSPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <Github className="w-4 h-4 mr-2" />
+                          <GitHubIcon className="w-4 h-4 mr-2" />
                           View Code
                         </a>
                       </Button>
@@ -302,7 +296,7 @@ export default function OSSPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Github className="w-5 h-5 mr-2" />
+              <GitHubIcon className="w-5 h-5 mr-2" />
               View Full GitHub Profile
             </a>
           </Button>

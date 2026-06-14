@@ -3,7 +3,8 @@
   startDate: "2026-04-01"
   endDate: null
   description: "HOET was founded by two engineers with over 10 years of combined experience and 15+ shipped products. Based in Morocco, we combine world-class engineering with premium design to build digital products that stand apart."
-  technologies: ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "Kubernetes"]
+  technologies:
+    ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "Kubernetes"]
   logoUrl: "/images/companies/hoet.png"
   url: "https://hoet.ma"
 

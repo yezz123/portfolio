@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
-import { Github, LogOut, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
+import { GitHubIcon } from "@/components/ui/svg-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function AuthButton() {
@@ -36,7 +37,7 @@ export function AuthButton() {
 
   return (
     <Button variant="outline" onClick={signInWithGitHub}>
-      <Github className="w-4 h-4 mr-2" />
+      <GitHubIcon className="w-4 h-4 mr-2" />
       Sign in with GitHub
     </Button>
   );

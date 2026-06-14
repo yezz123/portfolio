@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Mail, Github, Linkedin } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/svg-icons";
 import { XIcon } from "@/components/ui/x-icon";
 import { PersonalInfo, WorkExperience } from "@/lib/data";
 import { safeDateRangeFormat } from "@/lib/utils";
@@ -65,7 +66,7 @@ export default function AboutPage() {
     {
       name: "GitHub",
       href: `https://github.com/${personalInfo.github}`,
-      icon: Github,
+      icon: GitHubIcon,
       displayText: `@${personalInfo.github}`,
     },
     {
@@ -77,7 +78,7 @@ export default function AboutPage() {
     {
       name: "LinkedIn",
       href: `https://linkedin.com/in/${personalInfo.linkedin}`,
-      icon: Linkedin,
+      icon: LinkedInIcon,
       displayText: `@${personalInfo.linkedin}`,
     },
   ];
