@@ -1,3 +1,12 @@
+- company: "Hoet Technologies Sarl."
+  position: "Chief Technology Officer"
+  startDate: "2026-04-01"
+  endDate: null
+  description: "HOET was founded by two engineers with over 10 years of combined experience and 15+ shipped products. Based in Morocco, we combine world-class engineering with premium design to build digital products that stand apart."
+  technologies: ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "Kubernetes"]
+  logoUrl: "/images/companies/hoet.png"
+  url: "https://hoet.ma"
+
 - company: "Yezz LLC."
   position: "Founder & Software Engineer"
   startDate: "2021-01-17"
@@ -10,7 +19,7 @@
 - company: "Pragma Labs."
   position: "Founding Software Engineer"
   startDate: "2024-12-10"
-  endDate: null
+  endDate: "2026-04-01"
   description: "I joined Pragma as a Founding Senior Software Engineer, focusing on Working on infrastructure for oracles, enabling anyone to deploy optimized oracles for any application."
   technologies:
     ["Python", "Rust", "Docker", "Kubernetes", "FastAPI", "GCP", "AWS"]
