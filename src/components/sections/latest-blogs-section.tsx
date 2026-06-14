@@ -17,10 +17,20 @@ import Link from "next/link";
 import { BlogPost } from "@/lib/data";
 import { safeDateFormat } from "@/lib/utils";
 
-export function LatestBlogsSection() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+interface LatestBlogsSectionProps {
+  initialPosts?: BlogPost[];
+}
+
+export function LatestBlogsSection({
+  initialPosts = [],
+}: LatestBlogsSectionProps) {
+  const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
 
   useEffect(() => {
+    if (initialPosts.length > 0) {
+      return;
+    }
+
     const loadPosts = async () => {
       try {
         const response = await fetch("/api/blog-posts?featured=true");
@@ -33,7 +43,7 @@ export function LatestBlogsSection() {
       }
     };
     loadPosts();
-  }, []);
+  }, [initialPosts.length]);
 
   return (
     <section className="py-20">

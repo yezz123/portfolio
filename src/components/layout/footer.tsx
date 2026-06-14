@@ -6,45 +6,53 @@ import { motion } from "framer-motion";
 import { Mail, Heart, Gamepad2 } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/svg-icons";
 import { PersonalInfo } from "@/lib/data";
-import { loadConfig } from "@/lib/yaml-loader";
 import Image from "next/image";
 import { XIcon } from "@/components/ui/x-icon";
 
-interface FooterLink {
+export interface FooterLink {
   name: string;
   href: string;
 }
 
-interface FooterConfig {
+export interface FooterConfig {
   copyright?: string;
   madeWith?: string;
   pages?: FooterLink[];
   resources?: FooterLink[];
 }
 
-export function Footer() {
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
-  const [footerConfig, setFooterConfig] = useState<FooterConfig | null>(null);
+interface FooterProps {
+  initialPersonalInfo?: PersonalInfo | null;
+  initialFooterConfig?: FooterConfig | null;
+}
+
+export function Footer({
+  initialPersonalInfo = null,
+  initialFooterConfig = null,
+}: FooterProps) {
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(
+    initialPersonalInfo,
+  );
+  const [footerConfig] = useState<FooterConfig | null>(initialFooterConfig);
 
   useEffect(() => {
+    if (initialPersonalInfo) {
+      return;
+    }
+
     const loadData = async () => {
       try {
-        // Load personal info
         const personalResponse = await fetch("/api/personal-info");
         if (personalResponse.ok) {
           const info = await personalResponse.json();
           setPersonalInfo(info);
         }
-
-        // Load footer config
-        const config = await loadConfig();
-        setFooterConfig(config.footer || null);
       } catch (error) {
         console.error("Error loading footer data:", error);
       }
     };
     loadData();
-  }, []);
+  }, [initialPersonalInfo]);
 
   const socialLinks = personalInfo
     ? [

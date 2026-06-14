@@ -101,9 +101,11 @@ export default function UsesPage() {
           className="mb-16"
         >
           <div className="flex justify-center">
-            <div
-              className="relative w-full max-w-4xl cursor-pointer group"
+            <button
+              type="button"
+              className="relative w-full max-w-4xl cursor-pointer group border-0 bg-transparent p-0 text-left"
               onClick={() => setIsImageModalOpen(true)}
+              aria-label="Open office setup image"
             >
               <Image
                 src="/images/uses/office.png"
@@ -130,7 +132,7 @@ export default function UsesPage() {
                   </svg>
                 </div>
               </div>
-            </div>
+            </button>
           </div>
         </motion.div>
 

@@ -89,10 +89,20 @@ const ClientOnlyMotionDiv = ({
   return <MotionDiv {...props}>{children}</MotionDiv>;
 };
 
-export function ProjectsSection() {
-  const [projects, setProjects] = useState<Project[]>([]);
+interface ProjectsSectionProps {
+  initialProjects?: Project[];
+}
+
+export function ProjectsSection({
+  initialProjects = [],
+}: ProjectsSectionProps) {
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
 
   useEffect(() => {
+    if (initialProjects.length > 0) {
+      return;
+    }
+
     fetch("/api/projects?pinned=true")
       .then((res) => res.json())
       .then((data) => {
@@ -108,7 +118,7 @@ export function ProjectsSection() {
         console.error("Error loading projects:", error);
         setProjects([]);
       });
-  }, []);
+  }, [initialProjects.length]);
   return (
     <section id="projects" className="py-20 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -151,7 +161,7 @@ export function ProjectsSection() {
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
-                      <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                      <div className="aspect-video bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                         <span className="text-white text-2xl font-bold">
                           {project.name
                             .split(" ")
@@ -200,6 +210,7 @@ export function ProjectsSection() {
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`View ${project.name} source code on GitHub`}
                       >
                         <GitHubIcon className="w-4 h-4" />
                       </a>

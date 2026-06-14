@@ -9,10 +9,20 @@ import { XIcon } from "@/components/ui/x-icon";
 import { PersonalInfo } from "@/lib/data";
 import Image from "next/image";
 
-export function HeroSection() {
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
+interface HeroSectionProps {
+  initialPersonalInfo?: PersonalInfo | null;
+}
+
+export function HeroSection({ initialPersonalInfo = null }: HeroSectionProps) {
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(
+    initialPersonalInfo,
+  );
 
   useEffect(() => {
+    if (initialPersonalInfo) {
+      return;
+    }
+
     const loadPersonalInfo = async () => {
       try {
         const response = await fetch("/api/personal-info");
@@ -25,11 +35,11 @@ export function HeroSection() {
       }
     };
     loadPersonalInfo();
-  }, []);
+  }, [initialPersonalInfo]);
 
   if (!personalInfo) {
     return (
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-background via-background to-muted/20">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading...</p>

@@ -105,7 +105,7 @@ export default function AboutPage() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="inline-block hidden lg:block"
+              className="hidden lg:block"
             >
               <Image
                 src="/icons/wave.png"
@@ -150,9 +150,11 @@ export default function AboutPage() {
           className="mb-16"
         >
           <div className="flex justify-center">
-            <div
-              className="relative w-full max-w-6xl cursor-pointer group"
+            <button
+              type="button"
+              className="relative w-full max-w-6xl cursor-pointer group border-0 bg-transparent p-0 text-left"
               onClick={() => setIsImageModalOpen(true)}
+              aria-label="Open about banner image"
             >
               <Image
                 src="/images/og/og.jpeg"
@@ -179,7 +181,7 @@ export default function AboutPage() {
                   </svg>
                 </div>
               </div>
-            </div>
+            </button>
           </div>
         </motion.div>
 

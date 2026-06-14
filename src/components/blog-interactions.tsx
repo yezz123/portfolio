@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ThumbsDown, ThumbsUp, Link, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,25 @@ export function BlogInteractions({
   const [likes, setLikes] = useState(initialLikes);
   const [dislikes, setDislikes] = useState(initialDislikes);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const loadCounts = async () => {
+      try {
+        const response = await fetch(`/api/blog-posts/${blogId}/interactions`);
+        if (!response.ok) {
+          return;
+        }
+
+        const data = await response.json();
+        setLikes(data.likes || 0);
+        setDislikes(data.dislikes || 0);
+      } catch (error) {
+        console.error("Error loading blog interactions:", error);
+      }
+    };
+
+    loadCounts();
+  }, [blogId]);
 
   const handleReaction = async (action: "like" | "dislike") => {
     if (isLoading) return;
@@ -93,6 +112,7 @@ export function BlogInteractions({
             onClick={() => handleReaction("like")}
             disabled={isLoading}
             className="flex items-center gap-2 hover:bg-green-50 hover:border-green-200 hover:text-green-700 dark:hover:bg-green-950 dark:hover:border-green-800 dark:hover:text-green-300"
+            aria-label={`Like ${blogTitle}`}
           >
             <motion.div
               animate={{ scale: isLoading ? [1, 1.1, 1] : 1 }}
@@ -109,6 +129,7 @@ export function BlogInteractions({
             onClick={() => handleReaction("dislike")}
             disabled={isLoading}
             className="flex items-center gap-2 hover:bg-red-50 hover:border-red-200 hover:text-red-700 dark:hover:bg-red-950 dark:hover:border-red-800 dark:hover:text-red-300"
+            aria-label={`Dislike ${blogTitle}`}
           >
             <motion.div
               animate={{ scale: isLoading ? [1, 1.1, 1] : 1 }}
@@ -129,6 +150,7 @@ export function BlogInteractions({
             size="sm"
             onClick={() => handleShare("facebook")}
             className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 dark:hover:bg-blue-950 dark:hover:border-blue-800 dark:hover:text-blue-300"
+            aria-label={`Share ${blogTitle} on Facebook`}
           >
             <FacebookIcon className="w-4 h-4" />
           </Button>
@@ -138,6 +160,7 @@ export function BlogInteractions({
             size="sm"
             onClick={() => handleShare("twitter")}
             className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 dark:hover:bg-blue-950 dark:hover:border-blue-800 dark:hover:text-blue-300"
+            aria-label={`Share ${blogTitle} on X`}
           >
             <XIcon className="w-4 h-4" />
           </Button>
@@ -147,6 +170,7 @@ export function BlogInteractions({
             size="sm"
             onClick={() => handleShare("reddit")}
             className="flex items-center gap-2 hover:bg-orange-50 hover:border-orange-200 hover:text-orange-700 dark:hover:bg-orange-950 dark:hover:border-orange-800 dark:hover:text-orange-300"
+            aria-label={`Share ${blogTitle} on Reddit`}
           >
             <Globe className="w-4 h-4" />
           </Button>
@@ -156,6 +180,7 @@ export function BlogInteractions({
             size="sm"
             onClick={() => handleShare("copy")}
             className="flex items-center gap-2 hover:bg-gray-50 hover:border-gray-200 hover:text-gray-700 dark:hover:bg-gray-950 dark:hover:border-gray-800 dark:hover:text-gray-300"
+            aria-label={`Copy link to ${blogTitle}`}
           >
             <Link className="w-4 h-4" />
           </Button>

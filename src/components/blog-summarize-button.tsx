@@ -240,6 +240,7 @@ export function BlogSummarizeButton({
                   size="sm"
                   onClick={handleClose}
                   className="h-8 w-8 p-0"
+                  aria-label="Close AI summary"
                 >
                   <X className="w-4 h-4" />
                 </Button>

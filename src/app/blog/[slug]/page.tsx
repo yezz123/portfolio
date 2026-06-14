@@ -1,14 +1,10 @@
-"use client";
-
-import { use, useState, useEffect } from "react";
 import { notFound } from "next/navigation";
-import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { BlogPost } from "@/lib/data";
+import { getBlogPostBySlug, getPersonalInfo } from "@/lib/data";
 import { safeDateFormat } from "@/lib/utils";
 import { BlogInteractions } from "@/components/blog-interactions";
 import { CodeBlockScript } from "@/components/code-block";
@@ -22,61 +18,19 @@ interface BlogPostPageProps {
   }>;
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const resolvedParams = use(params);
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [interactions, setInteractions] = useState({
-    likes: 0,
-    dislikes: 0,
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadPost = async () => {
-      try {
-        const [postResponse, interactionsResponse] = await Promise.all([
-          fetch(`/api/blog-posts/${resolvedParams.slug}`),
-          fetch(`/api/blog-posts/${resolvedParams.slug}/interactions`),
-        ]);
-
-        if (postResponse.ok) {
-          const postData = await postResponse.json();
-          setPost(postData);
-        } else {
-          notFound();
-        }
-
-        if (interactionsResponse.ok) {
-          const interactionsData = await interactionsResponse.json();
-          setInteractions({
-            likes: interactionsData.likes || 0,
-            dislikes: interactionsData.dislikes || 0,
-          });
-        }
-      } catch (error) {
-        console.error("Error loading blog post:", error);
-        notFound();
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadPost();
-  }, [resolvedParams.slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const resolvedParams = await params;
+  const [post, personalInfo] = await Promise.all([
+    getBlogPostBySlug(resolvedParams.slug),
+    getPersonalInfo(),
+  ]);
 
   if (!post) {
     notFound();
   }
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://yezz.me";
+  const postUrl = `${baseUrl}/blog/${post.slug}`;
 
   // Generate structured data for SEO
   const structuredData = {
@@ -84,29 +38,27 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt,
-    image: post.image
-      ? `${process.env.NEXT_PUBLIC_BASE_URL || "https://yezz.me"}${post.image}`
-      : undefined,
+    image: post.image ? `${baseUrl}${post.image}` : undefined,
     datePublished: post.date,
     dateModified: post.date,
     author: {
       "@type": "Person",
-      name: "Yasser Tahiri",
-      url: "https://yezz.me",
+      name: personalInfo.name,
+      url: personalInfo.website,
       sameAs: [
-        "https://github.com/yezz123",
-        "https://twitter.com/yezz123",
-        "https://linkedin.com/in/yezz123",
+        `https://github.com/${personalInfo.github}`,
+        `https://x.com/${personalInfo.twitter}`,
+        `https://linkedin.com/in/${personalInfo.linkedin}`,
       ],
     },
     publisher: {
       "@type": "Person",
-      name: "Yasser Tahiri",
-      url: "https://yezz.me",
+      name: personalInfo.name,
+      url: personalInfo.website,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${process.env.NEXT_PUBLIC_BASE_URL || "https://yezz.me"}/blog/${post.slug}`,
+      "@id": postUrl,
     },
     keywords: post.tags.join(", "),
     articleSection: "Technology",
@@ -125,28 +77,18 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-8"
-        >
+        <div className="mb-8">
           <Button variant="ghost" asChild>
             <Link href="/blog">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Blog
             </Link>
           </Button>
-        </motion.div>
+        </div>
 
         {/* Featured Image */}
         {post.image && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.05 }}
-            className="mb-12"
-          >
+          <div className="mb-12">
             <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden">
               <Image
                 src={post.image}
@@ -156,16 +98,11 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                 priority
               />
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Article Header */}
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="mb-12"
-        >
+        <header className="mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             {post.title}
           </h1>
@@ -198,53 +135,34 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
 
           <Separator />
-        </motion.header>
+        </header>
 
         {/* Article Content */}
-        <motion.article
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="prose prose-neutral dark:prose-invert max-w-none"
-        >
+        <article className="prose prose-neutral dark:prose-invert max-w-none">
           <div className="blog-content">
             <div dangerouslySetInnerHTML={{ __html: post.content || "" }} />
           </div>
-        </motion.article>
+        </article>
 
         {/* Blog Interactions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.25 }}
-        >
+        <div>
           <BlogInteractions
             blogId={resolvedParams.slug}
-            initialLikes={interactions.likes}
-            initialDislikes={interactions.dislikes}
+            initialLikes={0}
+            initialDislikes={0}
             blogTitle={post.title}
-            blogUrl={`${window.location.origin}/blog/${post.slug}`}
+            blogUrl={postUrl}
           />
-        </motion.div>
+        </div>
 
         {/* Comments Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mt-16 pt-8"
-        >
+        <section className="mt-16 pt-8">
           <Separator className="mb-8" />
           <CommentSection blogId={resolvedParams.slug} />
-        </motion.section>
+        </section>
 
         {/* Article Footer */}
-        <motion.footer
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-16 pt-8"
-        >
+        <footer className="mt-16 pt-8">
           <Separator className="mb-8" />
 
           <div className="text-center">
@@ -260,7 +178,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
               </Button>
             </div>
           </div>
-        </motion.footer>
+        </footer>
       </div>
       <CodeBlockScript />
     </div>

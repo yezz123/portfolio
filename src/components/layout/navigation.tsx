@@ -13,17 +13,37 @@ import { PersonalInfo } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-export function Navigation() {
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: string;
+}
+
+interface NavigationProps {
+  initialPersonalInfo?: PersonalInfo | null;
+  initialNavigationItems?: NavigationItem[];
+}
+
+export function Navigation({
+  initialPersonalInfo = null,
+  initialNavigationItems = [],
+}: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
-  const [navigationItems, setNavigationItems] = useState<
-    Array<{ name: string; href: string; icon: string }>
-  >([]);
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(
+    initialPersonalInfo,
+  );
+  const [navigationItems, setNavigationItems] = useState<NavigationItem[]>(
+    initialNavigationItems,
+  );
   const pathname = usePathname();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstMenuItemRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
+    if (initialPersonalInfo && initialNavigationItems.length > 0) {
+      return;
+    }
+
     const loadData = async () => {
       try {
         const [personalResponse, navResponse] = await Promise.all([
@@ -45,7 +65,7 @@ export function Navigation() {
       }
     };
     loadData();
-  }, []);
+  }, [initialNavigationItems.length, initialPersonalInfo]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -173,6 +193,7 @@ export function Navigation() {
 
           {/* Mobile menu button */}
           <Button
+            id="mobile-menu-button"
             ref={menuButtonRef}
             variant="ghost"
             size="sm"

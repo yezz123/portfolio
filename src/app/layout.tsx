@@ -76,22 +76,6 @@ export async function generateMetadata(): Promise<Metadata> {
     verification: {
       google: process.env.GOOGLE_SITE_VERIFICATION,
     },
-    other: {
-      "application/ld+json": JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Person",
-        name: personal.name,
-        jobTitle: personal.title,
-        description: personal.bio,
-        url: site.url || personal.website,
-        sameAs: [
-          `https://github.com/${personal.github}`,
-          `https://twitter.com/${personal.twitter}`,
-          `https://linkedin.com/in/${personal.linkedin}`,
-        ],
-        image: `${site.url || personal.website}/favicon.ico`,
-      }),
-    },
   };
 }
 
@@ -100,6 +84,46 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  return <RootLayoutContent>{children}</RootLayoutContent>;
+}
+
+async function RootLayoutContent({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const config = await loadConfig();
+  const { personal, site, navigation, footer } = config;
+  const baseUrl = site?.url || personal.website;
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: personal.name,
+      jobTitle: personal.title,
+      description: personal.bio,
+      url: baseUrl,
+      sameAs: [
+        `https://github.com/${personal.github}`,
+        `https://x.com/${personal.twitter}`,
+        `https://linkedin.com/in/${personal.linkedin}`,
+      ],
+      image: `${baseUrl}/icon.svg`,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: site?.title || personal.name,
+      description: site?.description || personal.bio,
+      url: baseUrl,
+      inLanguage: "en",
+      publisher: {
+        "@type": "Person",
+        name: personal.name,
+      },
+    },
+  ];
+
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
@@ -149,9 +173,23 @@ export default function RootLayout({
           <AuthProvider>
             <KeyboardShortcutsProvider>
               <MouseCursor />
-              <Navigation />
-              <main className="pt-16">{children}</main>
-              <Footer />
+              <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100ocus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-foreground focus:ring-2 focus:ring-primary"
+              >
+                Skip to content
+              </a>
+              <Navigation
+                initialNavigationItems={navigation?.items || []}
+                initialPersonalInfo={personal}
+              />
+              <main id="main-content" className="pt-16" tabIndex={-1}>
+                {children}
+              </main>
+              <Footer
+                initialFooterConfig={footer || null}
+                initialPersonalInfo={personal}
+              />
               <DynamicCalBadge />
               <Toaster />
             </KeyboardShortcutsProvider>
@@ -159,6 +197,12 @@ export default function RootLayout({
         </ThemeProvider>
         <GoogleAnalytics />
         <Analytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
