@@ -86,7 +86,7 @@ export default function ProjectsPage() {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <div className="aspect-video bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                           <span className="text-white text-2xl font-bold">
                             {project.name
                               .split(" ")
