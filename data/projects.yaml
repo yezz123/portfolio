@@ -3,7 +3,7 @@
   description: "Hoet was founded by two engineers with over 10 years of combined experience and 15+ shipped products. Based in Morocco, we combine world-class engineering with premium design to build digital products that stand apart."
   url: "https://hoet.ma"
   technologies: ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "Kubernetes"]
-  imageUrl: "https://hoet.ma/images/background.png"
+  imageUrl: "/images/projects/hoet.png"
   featured: true
   pinned: true
 
@@ -12,7 +12,7 @@
   description: "Hyperoru watches the market, validates every decision, and executes on Hyperliquid and Binance — while your funds stay on the exchange."
   url: "https://hyperoru.com"
   technologies: ["Rust", "Terraform", "Hyperliquid", "Docker", "Kubernetes"]
-  imageUrl: "https://hyperoru.com/opengraph-image.png"
+  imageUrl: "/images/projects/hyperoru.png"
   featured: true
   pinned: true
 
