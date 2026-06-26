@@ -1,9 +1,18 @@
-- id: "0d Finance"
-  name: "0d Finance"
-  description: "0D Finance is a DeFi curator building institutional-grade vault strategies on Starknet."
-  url: "https://0d.finance"
-  technologies: ["Rust", "Terraform", "Starknet", "Docker", "Kubernetes"]
-  imageUrl: "/images/projects/0d.jpg"
+- id: "Hoet Technologies Sarl."
+  name: "Hoet Technologies Sarl."
+  description: "Hoet was founded by two engineers with over 10 years of combined experience and 15+ shipped products. Based in Morocco, we combine world-class engineering with premium design to build digital products that stand apart."
+  url: "https://hoet.ma"
+  technologies: ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "Kubernetes"]
+  imageUrl: "https://hoet.ma/images/background.png"
+  featured: true
+  pinned: true
+
+- id: "Hyperoru"
+  name: "Hyperoru"
+  description: "Hyperoru watches the market, validates every decision, and executes on Hyperliquid and Binance — while your funds stay on the exchange."
+  url: "https://hyperoru.com"
+  technologies: ["Rust", "Terraform", "Hyperliquid", "Docker", "Kubernetes"]
+  imageUrl: "https://hyperoru.com/opengraph-image.png"
   featured: true
   pinned: true
 
@@ -16,16 +25,6 @@
   featured: true
   pinned: true
 
-- id: "Pragma"
-  name: "Pragma"
-  description: "Pragma is the open and permissionless infrastructure for oracles, enabling anyone to deploy optimized oracles for any application."
-  url: "https://pragma.build"
-  technologies:
-    ["Python", "Rust", "Docker", "Kubernetes", "FastAPI", "GCP", "AWS"]
-  imageUrl: "/images/projects/pragma.jpg"
-  featured: true
-  pinned: true
-
 - id: "StackAI"
   name: "StackAI"
   description: "StackAI is a platform for building and deploying machine learning models with automated workflows and monitoring."
@@ -35,15 +34,24 @@
   featured: true
   pinned: false
 
-- id: "Authless"
-  name: "Authless (Coming Soon)"
-  description: "Authless is a modern, open-source authentication and authorization solution for modern web applications."
-  url: "https://github.com/authless-space"
-  technologies:
-    ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "Kubernetes"]
-  imageUrl: "/images/projects/authless.png"
+- id: "0d Finance"
+  name: "0d Finance"
+  description: "0D Finance is a DeFi curator building institutional-grade vault strategies on Starknet."
+  url: "https://0d.finance"
+  technologies: ["Rust", "Terraform", "Starknet", "Docker", "Kubernetes"]
+  imageUrl: "/images/projects/0d.jpg"
   featured: true
-  pinned: false
+  pinned: true
+
+- id: "Pragma"
+  name: "Pragma"
+  description: "Pragma is the open and permissionless infrastructure for oracles, enabling anyone to deploy optimized oracles for any application."
+  url: "https://pragma.build"
+  technologies:
+    ["Python", "Rust", "Docker", "Kubernetes", "FastAPI", "GCP", "AWS"]
+  imageUrl: "/images/projects/pragma.jpg"
+  featured: true
+  pinned: true
 
 - id: "Dopp Finance"
   name: "Dopp Finance"
